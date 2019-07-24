@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>Cell</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700|Fira+Mono:400">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/lib/codemirror.css">
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/lib/codemirror.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/fullscreen.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/fullscreen.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/mode/overlay.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/markdown/markdown.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/gfm/gfm.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/javascript/javascript.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/highlightjs@9.12.0/highlight.pack.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="marked.min.js"></script>
+
+        <script>
+            // https://shuheikagawa.com/blog/2015/09/21/using-highlight-js-with-marked/
+            const escapeMap = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            };
+            function escapeForHTML(input) {
+                return input.replace(/([&<>'"])/g, char => escapeMap[char]);
+            }
+
+            // Create your custom renderer.
+            const renderer = new marked.Renderer();
+            renderer.code = (code, language) => {
+              // Check whether the given language is valid for highlight.js.
+              const validLang = !!(language && hljs.getLanguage(language));
+
+              // Highlight only if the language is valid.
+              // highlight.js escapes HTML in the code, but we need to escape by ourselves
+              // when we don't use it.
+              const highlighted = validLang
+                ? hljs.highlight(language, code).value
+                : escapeForHTML(code);
+
+              // Render the highlighted code with `hljs` class.
+              return `<div class="hljs" lang="${language}"><pre><code class="hljs ${language}">${highlighted}</code></pre></div>`;
+            };
+        </script>
+        <script>
+        	marked.setOptions({
+        		gfm: true,
+        		breaks: true,
+        		latexRender: katex.renderToString.bind(katex),
+                renderer: renderer,
+        	});
+        </script>
+
+        <style>
+            html
+            {
+                margin: 0 auto;
+                max-width: 960px;
+            }
+            body
+            {
+                padding: 2em 8%;
+                background: #f7f0e7;
+                color: #2d1e14;
+                line-height: 1.7em;
+            }
+            pre
+            {
+                padding: 1em 1em;
+                border-radius: 5px;
+                line-height: 1.2em;
+                box-sizing: border-box;
+                width: 100%;
+                background: #fff;
+            }
+            .cell
+            {
+                box-sizing: border-box;
+                width: 100%;
+                padding: 0em 2em;
+                outline: none;
+                font-size: 16px;
+            }
+            .cell:not(:last-child)
+            {
+                margin-bottom: 1em;
+            }
+            .cell:hover
+            {
+                box-shadow: inset 3px 0 0 0 #42A5F5;
+            }
+            .cell:focus-within
+            {
+                box-shadow: inset 3px 0 0 0 #66BB6A;
+            }
+            .cell-editor
+            {
+                /* display is explicitly set for displayEditor */
+                display: block;
+                padding: 0.5em 1em;
+                width:100%;
+                box-sizing: border-box;
+
+                font-family: monospace;
+                outline: none;
+                border: 1px solid lightgray;
+                /* border-radius: 5px; */
+                background-color: #f5f5f5;
+            }
+            .cell-editor: focus
+            {
+                outline: none !important;
+                border-color: #719ECE;
+                box-shadow: 0 0 10px #719ECE;
+            }
+            .cell-render
+            {
+                /* display is explicitly set for displayEditor */
+                display: none;
+                padding: 0.0em 1em;
+                font-family: 'IBM Plex Sans', sans-serif;
+                border: 1px solid transparent;
+                outline: none;
+            }
+            .cell-render a
+            {
+                color: #095ae8;
+                transition: color .5s ease;
+            }
+            .cell-render a:hover {
+                opacity: .7;
+            }
+            .cell-render h1 > a
+            {
+                color: #2d1e14;
+                transition: color .5s ease;
+                text-decoration: none;
+            }
+            .cell-render ul
+            {
+                margin: 0em;
+                padding: 0em;
+            }
+            .CodeMirror
+            {
+                height: auto;
+            }
+            .cm-s-default .cm-atom
+            {
+                color: #10a778;
+            }
+            .cm-s-default .cm-keyword
+            {
+                color: #c30771;
+            }
+            .cm-s-default .cm-comment
+            {
+                color: #008ec4;
+            }
+            .cm-s-default .cm-number
+            {
+                color: #20a5ba;
+            }
+
+            p > code
+            {
+                /* background: linear-gradient(to right,#fce4ed,#ffe8cc); */
+                /* background: linear-gradient(to right,#83cff3,#ebf8e1); */
+                background: white;
+                padding: .1rem .3rem .2rem;
+                border-radius: .2rem;
+            }
+
+
+            blockquote
+            {
+                border-left: .25em solid #dfe2e5;
+                color: #6a737d;
+                padding: 0 1em;
+                margin-left: 0em;
+            }
+            .hljs {
+                display: block;
+                overflow-x: auto;
+                padding: .5em;
+                color: #383a42;
+                background: white;
+            }
+
+            .hljs-comment, .hljs-quote {
+                color: #a0a1a7;
+            }
+
+            .hljs-doctag, .hljs-formula, .hljs-keyword {
+                color: #a626a4
+            }
+
+            .hljs-deletion, .hljs-name, .hljs-section, .hljs-selector-tag, .hljs-subst {
+                color: #e45649
+            }
+
+            .hljs-literal {
+                color: #0184bb
+            }
+
+            .hljs-addition, .hljs-attribute, .hljs-meta-string, .hljs-regexp, .hljs-string {
+                color: #50a14f
+            }
+
+            .hljs-built_in, .hljs-class .hljs-title {
+                color: #c18401
+            }
+
+            .hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable {
+                color: #986801
+            }
+
+            .hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title {
+                color: #4078f2
+            }
+
+            .hljs-emphasis {
+                font-style: italic
+            }
+
+            .hljs-strong {
+                font-weight: 700
+            }
+
+            .hljs-link {
+                text-decoration: underline
+            }
+
+            div.hljs {
+                padding: 2em;
+                position: relative;
+            }
+
+            div.hljs::before
+            {
+                z-index: 100;
+                position: absolute;
+                content: "";
+                top: 10px;
+                right: 10px;
+                font-size: 15px;
+                font-weight: 300;
+                background-color: #ccc;
+                padding: 3px 5px;
+                border-radius: 3px;
+                color: #fff;
+                opacity: 0;
+                transition: opacity 0.2s ease-out;
+            }
+            div.hljs:hover::before {
+                opacity: 1;
+            }
+            div.hljs::before
+            {
+                content: attr(lang);
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div class="cell" tabindex="0">
+            <div class="cell-render"></div>
+        </div>
+        <script>
+
+            var default_options = {
+                mode: "gfm",
+                lineWrapping: true,
+                theme: "default",
+                autofocus: true,
+                extraKeys: {
+                    "F11": function(cm) {
+                        cm.setOption("fullScreen",  !cm.getOption("fullScreen"))
+                    },
+                    "Esc": function(cm) {
+                        if (cm.getOption("fullScreen")) {
+                            cm.setOption("fullScreen", false)
+                        }
+                    }
+                }
+            }
+
+            var cells = document.querySelectorAll(".cell")
+            for (let cell of cells) {
+                var code = CodeMirror(cell, default_options)
+                code.getWrapperElement().className += " " + "cell-editor"
+            }
+        </script>
+
+        <script>
+
+            function addCell(referenceCell) {
+                // Create temporary element to initialize cell.
+                let temp = document.createElement("div")
+                temp.innerHTML = `<div class="cell" tabindex="0"><div class="cell-render"></div></div>`
+
+                let cell = temp.firstChild
+                document.body.insertBefore(cell, referenceCell)
+
+                // Create CodeMirror instance for cell.
+                var code = CodeMirror(cell, default_options)
+                code.getWrapperElement().className += " " + "cell-editor"
+                return cell
+            }
+
+            function displayEditor(event) {
+                // Initialize temporary elements.
+                let cell = event.target.closest(".cell")
+                let editor = cell.querySelector(".cell-editor")
+                let render = cell.querySelector(".cell-render")
+
+                if (editor.style.display == "none") {
+                    editor.style.display =  "block"
+                    render.style.display =  "none"
+                    editor.CodeMirror.focus()
+                } else {
+                    editor.style.display =  "none"
+                    render.style.display =  "block"
+                    cell.focus()
+                }
+
+            }
+
+            function displayRender(event) {
+                // Initialize temporary elements.
+                let cell = event.target.closest(".cell")
+                let editor = cell.querySelector(".cell-editor")
+                let render = cell.querySelector(".cell-render")
+
+                const emptyText  = `<em> empty cell </em>`
+                render.innerHTML = marked(editor.CodeMirror.getValue()) || emptyText
+
+                displayEditor(event)
+            }
+
+            function getDisplay(element) {
+                return window.getComputedStyle(element).getPropertyValue("display")
+            }
+
+            var body = document.body
+
+            body.addEventListener("keydown",  function(event) {
+                console.log(event.target)
+
+                // Listen for shift+enter.
+                // Switches from render to editor.
+                // Switches to next cell and creates if needed.
+                if (event.keyCode == 13 &&  event.shiftKey) {
+
+                    // Check if target is within a cell element.
+                    let cell = event.target.closest(".cell")
+                    if (cell != null) {
+
+                        let editor = cell.querySelector(".cell-editor")
+                        let render = cell.querySelector(".cell-render")
+
+                        // Check if render is displayed.
+                        if (getDisplay(render) == "none") {
+                            displayRender(event)
+
+                        // Focus on next cell if render is displayed.
+                        } else {
+                            cell = cell.nextElementSibling
+                            if (cell == null || cell.className != "cell") {
+                                cell = addCell(cell)
+                            } else {
+                                cell.focus()
+                            }
+
+                        }
+
+                    // Target is outside a cell element.
+                    } else {
+                        cell = document.querySelector(".cell")
+                        if (cell == null) {
+                            cell = addCell()
+                        }
+                    }
+                }
+
+                // Listen for enter.
+                // Switches to editor from render.
+                if (event.keyCode == 13 && !event.shiftKey) {
+                    // Check if target is within a cell element.
+                    let cell = event.target.closest(".cell")
+                    if (cell != null) {
+
+                        let editor = cell.querySelector(".cell-editor")
+                        let render = cell.querySelector(".cell-render")
+
+                        // Check if editor is displayed.
+                        if (getDisplay(editor) == "none") {
+                            // Prevent enter from creating new line.
+                            event.preventDefault()
+                            displayEditor(event)
+                        }
+                    // Target is outside a cell element.
+                    } else {
+                        // Do nothing.
+                    }
+                }
+
+                // Listen for shift+backspace.
+                // Deletes the cell.
+                if (event.keyCode ==  8 &&  event.shiftKey) {
+                    // Check if target is within a cell element.
+                    let cell = event.target.closest(".cell")
+                    if (cell != null) {
+                        let prev = cell.previousElementSibling
+                        if (prev != null && prev.className == "cell") {
+                            prev.focus()
+                        }
+                        cell.parentElement.removeChild(cell)
+                    // Target is outside a cell element.
+                    } else {
+                        // Do nothing.
+                    }
+                }
+
+                if (event.keyCode == 38 && !event.shiftKey) {
+                    // Check if target is within a cell element.
+                    let cell = event.target.closest(".cell")
+                    if (cell != null) {
+
+                        let editor = cell.querySelector(".cell-editor")
+                        let render = cell.querySelector(".cell-render")
+                        let cursor = editor.CodeMirror.getCursor()
+
+                        let lineNum = 0
+                        let charNum = 0
+
+                        if (getDisplay(render) != "none"
+                        // This triggers because of a CodeMirror key event.
+                        || (cursor.line == lineNum && cursor.ch == charNum)) {
+
+                            let prev = cell.previousElementSibling
+                            if (prev != null && prev.className == "cell") {
+
+                                let editor = prev.querySelector(".cell-editor")
+                                let render = prev.querySelector(".cell-render")
+
+                                // Focus on prev editor if displayed.
+                                if (getDisplay(render) == "none") {
+                                    editor.CodeMirror.focus()
+                                } else {
+                                    prev.focus()
+                                }
+
+                            // No cell above current cell.
+                            } else {
+                                // Do nothing.
+                            }
+                        }
+
+                    // Target is outside a cell element.
+                    } else {
+                        // Do nothing.
+                    }
+                }
+
+                if (event.keyCode == 40 && !event.shiftKey) {
+                    // Check if target is within a cell element.
+                    let cell = event.target.closest(".cell")
+                    if (cell != null) {
+
+                        let editor = cell.querySelector(".cell-editor")
+                        let render = cell.querySelector(".cell-render")
+                        let cursor = editor.CodeMirror.getCursor()
+
+                        let lineNum = editor.CodeMirror.lastLine()
+                        let charNum = editor.CodeMirror.getLine(lineNum).length
+
+                        if (getDisplay(render) != "none"
+                        // This triggers because of a CodeMirror key event.
+                        || (cursor.line == lineNum && cursor.ch == charNum)) {
+
+                            let next = cell.nextElementSibling
+                            if (next != null && next.className == "cell") {
+
+                                let editor = next.querySelector(".cell-editor")
+                                let render = next.querySelector(".cell-render")
+
+                                // Focus on prev editor if displayed.
+                                if (getDisplay(render) == "none") {
+                                    editor.CodeMirror.focus()
+                                } else {
+                                    next.focus()
+                                }
+
+                            // No cell above current cell.
+                            } else {
+                                // Do nothing.
+                            }
+                        }
+
+                    // Target is outside a cell element.
+                    } else {
+                        // Do nothing.
+                    }
+                }
+
+
+
+
+            })
+
+            body.addEventListener("dblclick", function(event) {
+                // Check if target is within a cell element.
+                let cell = event.target.closest(".cell")
+                if (cell != null) {
+
+                    let editor = cell.querySelector(".cell-editor")
+                    let render = cell.querySelector(".cell-render")
+
+                    // Check if editor is displayed.
+                    if (getDisplay(editor) == "none") {
+                        displayEditor(event)
+                    }
+                // Target is outside a cell element.
+                } else {
+                    // Do nothing.
+                }
+            })
+
+        </script>
+    </body>
+</html>
