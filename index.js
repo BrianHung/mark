@@ -1,3 +1,19 @@
+function saveTextAsFile(filename, value) {
+
+    var textFileAsBlob = new Blob([value], {
+        type: "text/plain;charset=utf-8"
+    });
+
+    let download = document.createElement("a");
+    download.download  = filename + ".txt";
+    download.href = window.URL.createObjectURL(textFileAsBlob);
+    download.onclick = destroyClickedElement;
+    download.style.display = "none";
+    document.body.appendChild(download);
+
+    download.click();
+}
+
 var default_options = {
     mode: "gfm",
     lineWrapping: true,
@@ -11,7 +27,7 @@ var default_options = {
             if (cm.getOption("fullScreen")) {
                 cm.setOption("fullScreen", false)
             }
-        }
+        },
     }
 }
 
@@ -263,7 +279,19 @@ function EventListener(body) {
             }
         }
 
+        if (event.keyCode == 83
+        && (navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)) {
+            event.preventDefault()
 
+            let editor = body.querySelectorAll(".editor")
+            let text   = ""
+
+            for(let edit of editor) {
+                text += edit.CodeMirror.getValue() + "\n\n"
+            }
+
+            saveTextAsFile(document.title + ".txt", text)
+        }
 
     })
 
