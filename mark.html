@@ -21,6 +21,7 @@
         <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/markdown/markdown.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/gfm/gfm.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/javascript/javascript.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/python/python.js"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/highlightjs@9.12.0/highlight.pack.min.js"></script>
         <script>hljs.initHighlightingOnLoad()</script>
@@ -94,7 +95,7 @@
             }
             .cell:focus-within
             {
-                box-shadow: inset 3px 0 0 0 #66BB6A;
+                box-shadow: inset 3px 0 0 0 #30d158;
             }
             .cell-editor
             {
@@ -103,10 +104,9 @@
                 padding: 0.5em 0.75em;
                 width:100%;
                 box-sizing: border-box;
-
                 font-family: 'Fira Mono', monospace;
                 outline: none;
-                border-radius: 10px;
+                border-radius: 5px;
                 background-color: #f1f0f0;
             }
             .cell-editor: focus
@@ -122,7 +122,14 @@
                 padding: 0.0em 1em;
                 font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
                 border: 1px solid transparent;
+                border-radius: 5px;
                 outline: none;
+                transition-duration: 0.2s;
+            }
+            .cell-render:hover {
+                background-color: #F5F8FA;
+                background-color: #f1f0f0;
+                transition-property: background-color;
             }
             .cell-render a
             {
@@ -283,7 +290,7 @@
                 font-weight: 300;
                 background-color: #ccc;
                 padding: 3px 5px;
-                border-radius: 3px;
+                border-radius: 5px;
                 color: #fff;
                 opacity: 0;
                 transition: opacity 0.2s ease-out;

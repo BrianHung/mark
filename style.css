@@ -1,0 +1,208 @@
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  -webkit-font-smoothing: antialiased;
+  background-color: white;
+}
+
+.page {
+    min-height: 100%;
+    margin: 22px auto 0 auto;
+    padding-top: 32px;
+    max-width: 128ex;
+}
+
+.header {
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header a:after {
+    background-color: rgba(112, 202, 249,0.0);
+}
+
+.header li:not(:last-child) {
+    margin-right: 1em;
+}
+
+#about {
+    margin-bottom: 1rem;
+}
+
+#about p {
+    line-height: 1.5rem;
+}
+
+.header h1 {
+    font-size: 1.5em;
+    line-height: 1.4em;
+    margin-bottom: 0;
+}
+
+.header ul {
+    list-style-type: none;
+}
+
+.header li {
+    display: inline-block;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    padding: 0px 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #121314;
+    position: relative;
+}
+
+a:after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    top: 60%;
+    left: -0.1em;
+    right: -0.1em;
+    bottom: 0;
+    transition: top 200ms cubic-bezier(0, .8, .13, 1);
+    background-color: rgba(255, 221, 87, 0.5);
+    /*background-color: rgba(112, 202, 249,0.5);*/
+}
+
+a:hover:after {
+    top: 0%;
+}
+
+a.tag:after {
+    background-color: rgba(112, 202, 249,0.0);
+}
+
+a.tag:hover {
+    text-decoration: underline;
+}
+
+.tags {
+    margin: 1rem 0;
+}
+
+
+.tag {
+    display: inline-block;
+    padding: 0px 10px;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    color: whitesmoke;
+}
+
+.tag:not(:last-child) {
+    margin-right: 0.5rem;
+}
+
+.tag.tag-aiml {
+    background-color: #ffd6dd;
+    color: black;
+}
+
+.tag.tag-blck {
+    background-color: #7058F1;
+    color: whitesmoke;
+}
+
+.tag.tag-carr {
+    background-color: #E3BD98;
+    color: whitesmoke;
+}
+
+.tag.tag-comp {
+    background-color: #F1F2FC;
+    color: black;
+}
+
+.tag.tag-cult {
+    background-color: whitesmoke;
+    color: black;
+}
+
+.tag.tag-econ {
+    background-color: #FC3C5C;
+    color: whitesmoke;
+}
+
+.tag.tag-finc {
+    background-color: #00d1b2;
+    color: whitesmoke;
+}
+
+.tag.tag-intr {
+    background-color: #68CEFD;
+    color: whitesmoke;
+}
+
+.tag.tag-prod {
+    background-color: #FEE9A8;
+    color: black;
+}
+
+.tag.tag-math {
+    background-color: #3273dc;
+    color: whitesmoke;
+}
+
+.tag.tag-polt {
+  background-color: #BCA09C;
+  color: whitesmoke;
+}
+
+.tag.tag-prog {
+    background-color: #363636;
+    color: whitesmoke;
+}
+
+.tag.tag-tech {
+    background-color: #209cee;
+    color: whitesmoke;
+}
+
+.tag.tag-scic {
+    background-color: #333995;
+    color: whitesmoke;
+}
+
+.tag.tag-strt {
+    background-color: #FF8856;
+    color: whitesmoke;
+}
+
+.tag.tag-refr {
+    background-color: #ECCAB3;
+    color: black;
+}
+
+.story {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    display: block;
+    padding: 1.25rem;
+    margin: 1rem 0 1rem 0;
+}
+
+.story h1, h2, h3 {
+    margin-top: 0;
+    font-size: 24px;
+    overflow: hidden;
+}
+
+#reads {
+    margin: 1rem 0;
+}
+
+#reads-metadata span:nth-child(2) {
+    float: right;
+}
+
+#reads-metadata span:nth-child(2) img {
+    position: relative;
+    height: 16px;
+    top: 2px;
+}
