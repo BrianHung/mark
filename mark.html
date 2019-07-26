@@ -33,6 +33,10 @@
             html
             {
                 font-family: 'Inter', sans-serif;
+                text-rendering: optimizeLegibility;
+                font-feature-settings: "kern";
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
             }
             @supports (font-variation-settings: normal)
             {
@@ -86,6 +90,7 @@
             .cell:hover
             {
                 box-shadow: inset 3px 0 0 0 #42A5F5;
+                box-shadow: inset 3px 0 0 0 #0099ff;
             }
             .cell:focus-within
             {
@@ -101,10 +106,8 @@
 
                 font-family: 'Fira Mono', monospace;
                 outline: none;
-                border: 1px solid lightgray;
-                /* border-radius: 5px; */
-                background-color: #f5f5f5;
-                background-color: white;
+                border-radius: 10px;
+                background-color: #f1f0f0;
             }
             .cell-editor: focus
             {
@@ -154,6 +157,26 @@
             }
             .cell-render > .hljs {
                 padding: 0em;
+            }
+            .cell-render mark {
+                background: #ffe500;
+            }
+            .cell-render tr:nth-child(odd) td {
+                background: #eee;
+            }
+            .cell-render td, .cell-render th {
+                padding: 0.5em;
+            }
+            .cell-render table {
+                border-collapse: collapse;
+                margin: 1em auto;
+                min-width: 50%;
+            }
+            .cell-render thead {
+                border-top: 1px solid #bfbfbf;
+            }
+            .cell-render tbody {
+                border-bottom: 1px solid #bfbfbf;
             }
             .CodeMirror
             {

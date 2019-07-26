@@ -77,7 +77,7 @@ function EventListener(body) {
         let editor = cell.querySelector(".cell-editor")
         let render = cell.querySelector(".cell-render")
 
-        const emptyText  = `<em> empty cell </em>`
+        const emptyText  = `<p><em> empty cell </em></p>`
         render.innerHTML = markdown.render(editor.CodeMirror.getValue()) || emptyText
 
         displayEditor(event)
