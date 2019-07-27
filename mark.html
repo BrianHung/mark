@@ -49,14 +49,15 @@
             html
             {
                 margin: 0 auto;
+                height: 100%;
             }
             body
             {
                 padding: 2em 0;
-                background: #fafafa;
+                background: #ffffff;
                 color: black;
                 line-height: 1.1;
-                cursor: pointer;
+                height: 100%;
             }
             pre
             {
@@ -107,6 +108,7 @@
                 outline: none;
                 border-radius: 5px;
                 background-color: #f1f0f0;
+                line-height: 1.5;
             }
             .cell-editor: focus
             {
@@ -164,9 +166,6 @@
             .cell-render > .hljs {
                 padding: 0em;
             }
-            .cell-render mark {
-                background: #ffe500;
-            }
             .cell-render tr:nth-child(odd) td {
                 background: #eee;
             }
@@ -208,12 +207,13 @@
             p > code
             {
                 /* background: linear-gradient(to right,#fce4ed,#ffe8cc); */
-                /* background: linear-gradient(to right,#83cff3,#ebf8e1); */
-                background: white;
+                background: linear-gradient(to right,#83cff3,#ebf8e1);
                 padding: .1rem .3rem .2rem;
                 border-radius: .2rem;
             }
-
+            mark {
+                background: #ffe500;
+            }
 
             blockquote
             {
@@ -226,7 +226,6 @@
                 display: block;
                 overflow-x: auto;
                 color: #383a42;
-                background: white;
             }
 
             .hljs-comment, .hljs-quote {
@@ -288,7 +287,7 @@
                 font-size: 15px;
                 font-weight: 300;
                 background-color: #ccc;
-                padding: 3px 5px;
+                padding: 5px 5px;
                 border-radius: 5px;
                 color: #fff;
                 opacity: 0;
@@ -301,21 +300,214 @@
             {
                 content: attr(lang);
             }
-            .task-list-item {
+            .task-list-item
+            {
                 /* list-style-type: none; */
             }
-            .footnotes-sep {
+            .footnotes-sep
+            {
                 border: 1px solid lightgray;
             }
-            pre.hljs {
+            pre.hljs
+            {
                 margin: 0em;
                 min-height: 3.2em;
             }
+            .footer
+            {
+                position: fixed;
+                margin-right: 16px;
+                right: 0px;
+                bottom: 16px;
+            }
+            .icon
+            {
+                height: 32px;
+                fill: #AEAEB2;
+            }
+            .icon:hover
+            {
+                fill: #0a84ff;
+            }
+            .icon:not(:last-child)
+            {
+                margin-right: 4px;
+            }
+            .menu
+            {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                opacity: 0;
+                outline: none;
+                margin-bottom: 16px;
+                font-size: 17px;
+                border: 1px solid #f2f2f7;
+                border-radius: 5px;
+                padding: 0px;
+                box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27,39,51,0.08);
+                transform: translate3d(0px, -10px, 0px);
+                transition: opacity 0.2s ease-out;
+                min-width: 300px;
+            }
+            .menu:focus
+            {
+                opacity: 1;
+            }
+            .menu p, .menu blockquote
+            {
+                margin: 0;
+                display: inline;
+            }
+            .menu .button
+            {
+                width: 100%;
+                height: 30px;
+                outline: none;
+                border: 1px solid #f1f0f0;
+                border-radius: 5px;
+            }
+            .menu .button:hover
+            {
+                border: 1px solid #C7C7CC;
+            }
+            .menu .button .button-text
+            {
+                position: relative;
+                bottom: 8px;
+            }
+            .menu-head
+            {
+                margin: 5px 16px;
+                margin-top: 10px;
+            }
+            .menu-list
+            {
+                padding: 0px;
+                margin: 5px 0px;
+            }
+
+            .menu-list li
+            {
+                list-style-type: none;
+                line-height: normal;
+                padding: 8px 16px;
+            }
+
+            .menu-list li:hover
+            {
+                background-color: #f2f2f7;
+            }
+
+            .menu-list .list-line hr
+            {
+                margin: 0;
+                padding: 0px 8px;
+                border: 0;
+                border-top: 1px solid #f2f2f7;
+            }
+            .menu-list .list-line:hover
+            {
+                background-color: #ffffff;
+            }
+            .menu-list .list-right
+            {
+                float: right;
+            }
         </style>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="google-signin-client_id" content="619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln.apps.googleusercontent.com">
 
     </head>
 
     <body>
+        <div class="footer">
+            <div style="position: relative;">
+                <div class="menu menu-help" tabindex="-1">
+                    <h3 class="menu-head">Markdown</h3>
+                    <ul class="menu-list">
+                        <li class="list-line"><hr></li>
+                        <li>
+                            <span><em>Italics</em></span>
+                            <span class="list-right">_text_</span>
+                        </li>
+                        <li>
+                            <span><strong>Bold</strong></span>
+                            <span class="list-right">**bold**</span>
+                        </li>
+                        <li>
+                            <span><s>Strikethrough</s></span>
+                            <span class="list-right">~~strike~~</span>
+                        </li>
+                        <li>
+                            <span><mark>Mark</mark></span>
+                            <span class="list-right">==mark==~</span>
+                        </li>
+                        <li>
+                            <span><code>Code</code></span>
+                            <span class="list-right">`code`, ```</span>
+                        </li>
+                        <li>
+                            <span><blockquote>quote</blockquote></span>
+                            <span class="list-right">> quote</span>
+                        </li>
+                        <li>
+                            <span>Divider</span>
+                            <span class="list-right">---</span>
+                        </li>
+                        <li>
+                            <span style="font-family: KaTeX_Main; font-size: 15.488px;">
+                                <span style="line-height: 18.6584px;">L</span><span style="font-size: 0.75em; margin: 0px 0px 0px -0.32em; position: relative; top: -0.2em;">A</span><span style="margin: 0px 0px 0px -0.23em; line-height: 18.6584px;">T</span><span style="margin: 0px 0px 0px -0.1667em; line-height: 18.6584px; position: relative; top: 0.2155em;">E</span><span style="margin: 0px 0px 0px -0.125em; line-height: 18.6584px;">X</span>
+                            </span>
+                            <span class="list-right">$x^2$, $$x^2$$</span>
+                        </li>
+                        <li class="list-line"><hr></li>
+                    </ul>
+                </div>
+                <div class="menu menu-main" tabindex="-1">
+                    <h3 class="menu-head">Main Menu</h3>
+                    <ul class="menu-list">
+                        <li class="list-line"><hr></li>
+                        <li>
+                            <div class="g-signin2" data-onsuccess="onSignIn">
+                                <button class="button" type="button">
+                                    <span class="button-icon">
+                                        <svg width="25" height="25">
+                                            <g fill="none" fill-rule="evenodd">
+                                                <path d="M20.66 12.693c0-.603-.054-1.182-.155-1.738H12.5v3.287h4.575a3.91 3.91 0 0 1-1.697 2.566v2.133h2.747c1.608-1.48 2.535-3.65 2.535-6.24z" fill="#4285F4"></path><path d="M12.5 21c2.295 0 4.22-.76 5.625-2.06l-2.747-2.132c-.76.51-1.734.81-2.878.81-2.214 0-4.088-1.494-4.756-3.503h-2.84v2.202A8.498 8.498 0 0 0 12.5 21z" fill="#34A853"></path><path d="M7.744 14.115c-.17-.51-.267-1.055-.267-1.615s.097-1.105.267-1.615V8.683h-2.84A8.488 8.488 0 0 0 4 12.5c0 1.372.328 2.67.904 3.817l2.84-2.202z" fill="#FBBC05"></path>
+                                                <path d="M12.5 7.38c1.248 0 2.368.43 3.25 1.272l2.437-2.438C16.715 4.842 14.79 4 12.5 4a8.497 8.497 0 0 0-7.596 4.683l2.84 2.202c.668-2.01 2.542-3.504 4.756-3.504z" fill="#EA4335"></path>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span class="button-text">Sign in with Google</span>
+                                </button>
+                            </div>
+                        </li>
+                        <li class="list-line"><hr></li>
+                        <li>Download as JSON</li>
+                        <li>Download as Markdown</li>
+                        <li class="list-line"><hr></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="float: right;">
+                <svg class="icon icon-help" viewBox="0 0 32 32"><path d="M4 11c0-1.65 1.29-3 2.867-3h17.266C25.72 8 27 9.344 27 11v10c0 1.652-1.29 3-2.867 3H6.867C5.28 24 4 22.656 4 21V11zm2 10c0 .555.422 1 .942 1h17.116c.51 0 .942-.448.942-1V11c0-.555-.422-1-.942-1H6.942c-.51 0-.942.448-.942 1v10zm2-5.8c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2H8.2c-.11 0-.2-.086-.2-.2v-1.6zm14-3c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-6 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2H7.2c-.11 0-.2-.086-.2-.2v-1.6zm3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm1 3c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-13 3c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2H7.2c-.11 0-.2-.086-.2-.2v-1.6zm15 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-12 0c0-.11.095-.2.19-.2h10.62c.105 0 .19.086.19.2v1.6c0 .11-.095.2-.19.2H10.19a.193.193 0 0 1-.19-.2v-1.6z"></path></svg>
+                <svg class="icon icon-main" viewBox="0 0 32 32"><path d="M5 16C5 9.925 9.924 5 16 5c6.075 0 11 4.924 11 11 0 6.075-4.924 11-11 11-6.075 0-11-4.924-11-11zm1.913 0A9.086 9.086 0 0 0 16 25.087 9.086 9.086 0 0 0 25.087 16 9.086 9.086 0 0 0 16 6.913 9.086 9.086 0 0 0 6.913 16zm10.042 5.26h-2.076v-1.874h2.076v1.875zm.656-7.82c0-.83-.563-1.406-1.513-1.406-1.032 0-1.768.616-1.755 2.09h-1.727c-.04-2.09 1.259-3.536 3.495-3.536 2.303 0 3.267 1.299 3.267 2.759 0 1.285-.589 1.955-1.406 2.638l-.763.63c-.375.307-.495.428-.495.896v.603h-1.58v-.857c0-.857.187-1.058.897-1.66l.723-.603c.535-.442.857-.844.857-1.554z" fill-rule="evenodd"></path></svg>
+            </div>
+        </div>
+        <script>
+        const iconHelp = document.querySelector(".icon-help")
+        const iconMain = document.querySelector(".icon-main")
+        const menuHelp = document.querySelector(".menu-help")
+        const menuMain = document.querySelector(".menu-main")
+
+        iconHelp.addEventListener("click", function(event) {
+            menuHelp.focus()
+        })
+        iconMain.addEventListener("click", function(event) {
+            menuMain.focus()
+        })
+        </script>
         <script src="index.js"></script>
         <script>EventListener(document.body)</script>
     </body>

@@ -71,6 +71,7 @@ function addCell(parent, nextCell=null, mirrorOptions=defaultOptions, editing=tr
     // Create CodeMirror instance for cell.
     let mirror = CodeMirror(cell, mirrorOptions)
     mirror.getWrapperElement().className += " " + "cell-editor"
+    mirror.refresh()
 
     // Create shorthands to reference editor and render.
     cell.editor = cell.querySelector(".cell-editor")
@@ -121,11 +122,11 @@ function EventListener(body) {
 
     body.addEventListener("keydown",  function(event) {
         // Event target is with-in a cell element.
+        console.log(event, event.code, event.shiftKey, event.target)
         let cell = event.target.closest(".cell")
         if (cell != null) {
-
-            switch(event.keyCode) {
-                case  8: // backspace
+            switch(event.code) {
+                case "Backspace":
                     if (event.shiftKey) {
                         let prev = cell.previousElementSibling
                         if (prev != null && prev.className == "cell") {
@@ -134,7 +135,8 @@ function EventListener(body) {
                         cell.parentElement.removeChild(cell)
                     }
                     break
-                case 13: // enter
+                case "Enter":
+                    console.log("enter")
                     if (event.shiftKey) {
                         // Display render if not displayed.
                         console.log(cell, cell.editing)
@@ -158,12 +160,12 @@ function EventListener(body) {
                         }
                     }
                     break
-                case 27: // esc
+                case "Escape":
                     if (cell.editing) {
                         cell.focus()
                     }
                     break
-                case 38: // up-arrow
+                case "ArrowUp":
                     if (event.shiftKey) {
                         if (!cell.editing) {
                             let prev = cell.previousElementSibling
@@ -193,7 +195,7 @@ function EventListener(body) {
                         }
                     }
                     break
-                case 40: // dw-arrow
+                case "ArrowDown":
                     if (event.shiftKey) {
                         if (!cell.editing) {
                             let next = cell.nextElementSibling
@@ -223,20 +225,20 @@ function EventListener(body) {
                         }
                     }
                     break
-                case 74: // j
+                case "j": // j
                     cell.editor.CodeMirror.setOption("mode", "javascript")
                     break
-                case 77: // m
+                case "m": // m
                     cell.editor.CodeMirror.setOption("mode", "gfm")
                     break
-                case 80: // p
+                case "p": // p
                     cell.editor.CodeMirror.setOption("mode", "python")
                     break
             }
         // Event target is outside a cell.
         } else {
-            switch (event.keyCode) {
-                case 13:
+            switch (event.code) {
+                case "Enter":
                     if (event.shiftKey) {
                         cell = document.querySelector(".cell")
                         if (cell == null) {
@@ -251,14 +253,10 @@ function EventListener(body) {
     body.addEventListener("dblclick", function(event) {
         // Check if target is within a cell element.
         let cell = event.target.closest(".cell")
-        if (cell != null) {
-            // Check if editor is displayed.
-            if (cell.editing) {
-                displayEditor(cell)
-            }
-        // Target is outside a cell element.
-        } else {
-            // Do nothing.
+        if (cell == null) {
+            body.dispatchEvent(new KeyboardEvent('keydown', {
+                code: "Enter", shiftKey: true
+            }))
         }
     })
 }
