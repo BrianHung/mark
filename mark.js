@@ -50,7 +50,7 @@ function saveTextAsMark() {
     let mark = ""
     for(let cell of document.querySelectorAll(".cell")) {
         let mirror = cell.editor.CodeMirror
-        mark += mirror.getValue() + "\n\n"
+        mark += mirror.getValue() + "\n<br>\n"
     }
     return mark
 }
@@ -64,6 +64,17 @@ function initPgFromJson(body, json) {
     for(let c of cells) {
         let o = Object.assign({}, defaultOptions, {mode: c.cell_type, value: c.source})
         addCell(body, mirrorOptions=o, editing=c.editing)
+    }
+}
+/**
+ * Initializes the page from mark representation.
+ * @return undefined
+ */
+function initPgFromMark(body, text) {
+    let text = text.split("\n<br>\n")
+    for(let t of text) {
+        let o = Object.assign({}, defaultOptions, {mode: "gfm", value: t})
+        addCell(body, mirrorOptions=o, editing=true)
     }
 }
 
@@ -115,7 +126,7 @@ function downloadJson() {
 }
 
 function downloadMark() {
-    saveTextAsFile(saveTextAsMark(), "text.txt")
+    saveTextAsFile(saveTextAsMark(), "text.md")
 }
 
 const defaultOptions = {
