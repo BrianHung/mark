@@ -32,7 +32,6 @@
         <link rel="stylesheet" href="mark.css">
         <script src="mark.js"></script>
 
-        <script src="https://apis.google.com/js/api:client.js"></script>
     </head>
 
     <body>
@@ -143,14 +142,17 @@
         })
         </script>
         <script>EventListener(document.body)</script>
+        <script src="https://apis.google.com/js/api:client.js?onload=init" async defer></script>
+
         <script>
-            gapiInit = function() {
+            function init() {
                 gapi.load('auth2', function(){
                     auth2 = gapi.auth2.init({
                         client_id: '619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln.apps.googleusercontent.com',
                         cookiepolicy: 'single_host_origin',
                         fetch_basic_profile: true,
                         scope: "https://www.googleapis.com/auth/drive",
+                        ux_mode: "redirect",
                     })
                     auth2.attachClickHandler(document.querySelector(".button"), {},
                         function(googleUser) {
@@ -161,7 +163,6 @@
                     })
                 })
             }
-            gapiInit()
         </script>
 
     </body>
