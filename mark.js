@@ -71,8 +71,8 @@ function initPgFromJson(body, json) {
  * @return undefined
  */
 function initPgFromMark(body, text) {
-    let text = text.split("\n<br>\n")
-    for(let t of text) {
+    let texts = text.split("\n<br>\n")
+    for(let t of texts) {
         let o = Object.assign({}, defaultOptions, {mode: "gfm", value: t})
         addCell(body, mirrorOptions=o, editing=true)
     }
