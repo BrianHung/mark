@@ -279,7 +279,7 @@
 
             div.hljs::before
             {
-                z-index: 100;
+                z-index: 10;
                 position: absolute;
                 content: "";
                 top: 10px;
@@ -340,20 +340,38 @@
                 right: 0;
                 opacity: 0;
                 outline: none;
-                margin-bottom: 16px;
-                font-size: 17px;
-                border: 1px solid #f2f2f7;
+                margin: 16px 0px;
+                font-size: 16px;
                 border-radius: 5px;
                 padding: 0px;
                 box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27,39,51,0.08);
-                transform: translate3d(0px, -10px, 0px);
                 transition: opacity 0.2s ease-out;
                 min-width: 300px;
+                max-height: 90vh;
+                z-index: -1;
+                overflow: scroll;
+                scrollbar-width: none;
+            }
+            .menu::-webkit-scrollbar {
+                display: none;
+            }
+            .menu > *
+            {
+                opacity: 0;
+                z-index: -1;
+                display: none;
+                user-select: none;
             }
             .menu:focus
             {
                 opacity: 1;
-                z-index: 1;
+                z-index: 10;
+            }
+            .menu:focus > *
+            {
+                opacity: 1;
+                z-index: 11;
+                display: block;
             }
             .menu p, .menu blockquote
             {
@@ -433,13 +451,32 @@
             }
         </style>
         <script src="https://apis.google.com/js/api:client.js"></script>
-
+        <script src="index.js"></script>
     </head>
 
     <body>
         <div class="footer">
             <div style="position: relative;">
                 <div class="menu menu-help" tabindex="-1">
+                    <h3 class="menu-head">Shortcuts</h3>
+                    <ul class="menu-list">
+                        <li>
+                            <span>edit cell</span>
+                            <span class="list-right"><code>enter</code></span>
+                        </li>
+                        <li>
+                            <span>add/render cell</span>
+                            <span class="list-right"><code>shift</code>+<code>enter</code></span>
+                        </li>
+                        <li>
+                            <span>delete cell</span>
+                            <span class="list-right"><code>shift</code>+<code>bkspc</code></span>
+                        </li>
+                        <li>
+                            <span>focus above/below</span>
+                            <span class="list-right"><code>up</code>/<code>down</code></span>
+                        </li>
+                    </ul>
                     <h3 class="menu-head">Markdown</h3>
                     <ul class="menu-list">
                         <li class="list-line"><hr></li>
@@ -481,7 +518,7 @@
                     </ul>
                 </div>
                 <div class="menu menu-main" tabindex="-1">
-                    <h3 class="menu-head">Main Menu</h3>
+                    <h3 class="menu-head">Menu</h3>
                     <ul class="menu-list">
                         <li class="list-line"><hr></li>
                         <li>
@@ -500,8 +537,8 @@
                             </div>
                         </li>
                         <li class="list-line"><hr></li>
-                        <li><button class="button-hidden">Download as JSON</button></li>
-                        <li><button class="button-hidden">Download as Markdown</button></li>
+                        <li><button class="button-hidden" onclick="downloadJson()">Download as JSON    </button></li>
+                        <li><button class="button-hidden" onclick="downloadMark()">Download as Markdown</button></li>
                         <li class="list-line"><hr></li>
                     </ul>
                 </div>
@@ -524,12 +561,10 @@
             menuMain.focus()
         })
         </script>
+        <script>EventListener(document.body)</script>
         <script>
             gapiInit = function() {
-                console.log("1")
                 gapi.load('auth2', function(){
-                    console.log("2")
-                    // Retrieve the singleton for the GoogleAuth library and set up the client.
                     auth2 = gapi.auth2.init({
                         client_id: '619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln.apps.googleusercontent.com',
                         cookiepolicy: 'single_host_origin',
@@ -546,7 +581,6 @@
             }
             gapiInit()
         </script>
-        <script src="index.js"></script>
-        <script>EventListener(document.body)</script>
+
     </body>
 </html>

@@ -42,6 +42,18 @@ function saveTextAsJson() {
     }
     return JSON.stringify({metadata: {}, cells: cells})
 }
+/**
+ * Returns json representation of text based on ipynb format.
+ * @return json
+ */
+function saveTextAsMark() {
+    let mark = ""
+    for(let cell of document.querySelectorAll(".cell")) {
+        let mirror = cell.editor.CodeMirror
+        mark += mirror.getValue() + "\n\n"
+    }
+    return mark
+}
 
 /**
  * Initializes the page from json representation.
@@ -86,19 +98,26 @@ function addCell(parent, nextCell=null, mirrorOptions=defaultOptions, editing=tr
  * Saves markdown representation of text.
  * @return undefined
  */
-function saveTextAsFile(value, filename) {
+function saveTextAsFile(value, filename, type="text/plain;charset=utf-8") {
 
-    var textFileAsBlob = new Blob([value], {
-        type: "text/plain;charset=utf-8"
-    });
-
+    var text = new Blob([value], {type: type});
     let file = document.createElement("a");
-    file.download = filename + ".txt";
-    file.href = window.URL.createObjectURL(textFileAsBlob);
-    file.onclick = destroyClickedElement;
-    file.style.display = "none";
-    file.body.appendChild(download);
+    file.download = filename;
+    file.href = window.URL.createObjectURL(text);
+    // file.onclick = destroyClickedElement;
+    // file.style.display = "none";
+    // file.body.appendChild(download);
     file.click();
+}
+
+function downloadJson() {
+    console.log("download")
+    saveTextAsFile(saveTextAsJson(), "text.json", "application/json")
+}
+
+function downloadMark() {
+    console.log("download")
+    saveTextAsFile(saveTextAsMark(), "text.txt")
 }
 
 const defaultOptions = {
