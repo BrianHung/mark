@@ -111,12 +111,10 @@ function saveTextAsFile(value, filename, type="text/plain;charset=utf-8") {
 }
 
 function downloadJson() {
-    console.log("download")
     saveTextAsFile(saveTextAsJson(), "text.json", "application/json")
 }
 
 function downloadMark() {
-    console.log("download")
     saveTextAsFile(saveTextAsMark(), "text.txt")
 }
 
