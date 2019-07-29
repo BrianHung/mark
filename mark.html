@@ -170,25 +170,78 @@
         })
         </script>
         <script>EventListener(document.body)</script>
-        <script src="https://apis.google.com/js/api:client.js?onload=init" async defer></script>
+        <script src="https://apis.google.com/js/api:client.js?onload=initClient" async defer></script>
 
         <script>
-            function init() {
+
+            // The Browser API key obtained from the Google API Console.
+            var apiKey = "AIzaSyCVoUn8BeFWqDN8oUkdSfb3O71ZkNvwS8s"
+            // The Client ID obtained from the Google API Console.
+            var clientId = "619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln.apps.googleusercontent.com"
+
+            var pickerApiLoaded = false
+            var oauthToken
+
+            function initClient() {
+
                 gapi.load('auth2', function(){
                     auth2 = gapi.auth2.init({
-                        client_id: '619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln.apps.googleusercontent.com',
+                        client_id: clientId,
                         cookiepolicy: 'single_host_origin',
                         fetch_basic_profile: true,
                         scope: "https://www.googleapis.com/auth/drive",
                         ux_mode: "redirect",
+                    }).then(function(googleAuth) {
+                        console.log(googleAuth)
+                        googleAuth.signIn().then(function(result) {
+                            let authResult = result.getAuthResponse()
+                            handleAuthResult(authResult)
+                        })
                     })
                     auth2.attachClickHandler(document.querySelector(".button"), {},
                         function(googleUser) {
                             user = googleUser
-                        }, function(error) {
+                        },
+                        function(error) {
                             console.log(JSON.stringify(error, undefined, 2));
-                    })
+                        },
+                    )
                 })
+
+                gapi.load('picker', function() {
+                    pickerApiLoaded = true
+                    createPicker()
+                })
+
+                function handleAuthResult(authResult) {
+                    if (authResult && !authResult.error) {
+                      oauthToken = authResult.access_token
+                      createPicker();
+                  }
+                }
+                // Create and render a Picker object for picking user Photos.
+                 function createPicker() {
+                     if (pickerApiLoaded && oauthToken) {
+                         var picker = new google.picker.PickerBuilder().
+                         addView(google.picker.ViewId.PHOTOS).
+                         setOAuthToken(oauthToken).
+                         setDeveloperKey(developerKey).
+                         setCallback(pickerCallback).
+                         build();
+                     picker.setVisible(true);
+                   }
+                 }
+
+                 // A simple callback implementation.
+                 function pickerCallback(data) {
+                     var url = 'nothing';
+                     if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+                         var doc = data[google.picker.Response.DOCUMENTS][0];
+                         url = doc[google.picker.Document.URL];
+                     }
+                     var message = 'You picked: ' + url;
+                     console.log(message)
+                 }
             }
         </script>
 
