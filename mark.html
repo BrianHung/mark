@@ -125,8 +125,8 @@
                         <ul class="menu-list">
                             <li class="list-line"><hr></li>
                             <li>
-                                <div class="button-div g-signin2" data-onsuccess="onSignIn">
-                                    <button class="button customGPlusSignIn" type="button">
+                                <div class="button-div">
+                                    <button class="button" type="button">
                                         <span class="button-icon">
                                             <svg width="25" height="25">
                                                 <g fill="none" fill-rule="evenodd">
@@ -152,83 +152,75 @@
                 </div>
             </div>
         </div>
-        <script>
-        const iconFile = document.querySelector(".icon-file")
-        const iconHelp = document.querySelector(".icon-help")
-        const iconMain = document.querySelector(".icon-main")
-        const menuFile = document.querySelector(".menu-file")
-        const menuHelp = document.querySelector(".menu-help")
-        const menuMain = document.querySelector(".menu-main")
-        iconFile.addEventListener("click", function(event) {
-            menuFile.focus()
-        })
-        iconHelp.addEventListener("click", function(event) {
-            menuHelp.focus()
-        })
-        iconMain.addEventListener("click", function(event) {
-            menuMain.focus()
-        })
-        </script>
+
         <script>EventListener(document.body)</script>
         <script src="https://apis.google.com/js/api:client.js?onload=initClient" async defer></script>
 
         <script>
 
             // The Browser API key obtained from the Google API Console.
-            var apiKey = "AIzaSyCVoUn8BeFWqDN8oUkdSfb3O71ZkNvwS8s"
+            var pickerKey = "AIzaSyCVoUn8BeFWqDN8oUkdSfb3O71ZkNvwS8s"
+            // AIzaSyBL09MBSofA7a9vWTOU60TFwGxe9FrDnPY
             // The Client ID obtained from the Google API Console.
-            var clientId = "619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln.apps.googleusercontent.com"
+            var clientId  = "619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln.apps.googleusercontent.com"
 
             var pickerApiLoaded = false
             var oauthToken
+            var googleAuth
+            var googleUser
+
+            var picker
 
             function initClient() {
 
-                gapi.load('auth2', function(){
-                    auth2 = gapi.auth2.init({
+                gapi.load('auth2', function() {
+                    // Initialize auth with client settings.
+                    googleAuth = gapi.auth2.init({
                         client_id: clientId,
                         cookiepolicy: 'single_host_origin',
                         fetch_basic_profile: true,
                         scope: "https://www.googleapis.com/auth/drive",
                         ux_mode: "redirect",
-                    }).then(function(googleAuth) {
-                        console.log(googleAuth)
-                        googleAuth.signIn().then(function(result) {
-                            let authResult = result.getAuthResponse()
-                            handleAuthResult(authResult)
-                        })
                     })
-                    auth2.attachClickHandler(document.querySelector(".button"), {},
-                        function(googleUser) {
-                            user = googleUser
-                        },
-                        function(error) {
-                            console.log(JSON.stringify(error, undefined, 2));
-                        },
-                    )
+                    // Add method to sign in user if not signed in.
+                    googleAuth.attachClickHandler(document.querySelector(".button"))
+                    // Add method to assign currentUser to googleUser.
+                    googleAuth.currentUser.listen(userAuth)
                 })
 
-                gapi.load('picker', function() {
-                    pickerApiLoaded = true
-                    createPicker()
-                })
-
+                function userAuth(currentUser) {
+                    // Assign currentUser to googleUser if signed in.
+                    if (currentUser.isSignedIn()) {
+                        googleUser = currentUser
+                        handleAuthResult(googleUser.getAuthResponse())
+                    }
+                }
                 function handleAuthResult(authResult) {
                     if (authResult && !authResult.error) {
                       oauthToken = authResult.access_token
                       createPicker();
                   }
                 }
+
+                gapi.load('picker', function() {
+                    pickerApiLoaded = true
+                    createPicker()
+                })
+
                 // Create and render a Picker object for picking user Photos.
                  function createPicker() {
                      if (pickerApiLoaded && oauthToken) {
-                         var picker = new google.picker.PickerBuilder().
-                         addView(google.picker.ViewId.PHOTOS).
+                         picker = new google.picker.PickerBuilder().
+                         addView(new google.picker.DocsUploadView()).
+                         addView(google.picker.ViewId.DOCUMENTS).
+                         addView(google.picker.ViewId.FOLDERS).
+                         addView(google.picker.ViewId.PDFS).
+                         addView(google.picker.ViewId.RECENTLY_PICKED).
                          setOAuthToken(oauthToken).
-                         setDeveloperKey(developerKey).
+                         setDeveloperKey(pickerKey).
                          setCallback(pickerCallback).
                          build();
-                     picker.setVisible(true);
+
                    }
                  }
 
@@ -244,6 +236,23 @@
                  }
             }
         </script>
-
+        <script>
+        const iconFile = document.querySelector(".icon-file")
+        const iconHelp = document.querySelector(".icon-help")
+        const iconMain = document.querySelector(".icon-main")
+        const menuFile = document.querySelector(".menu-file")
+        const menuHelp = document.querySelector(".menu-help")
+        const menuMain = document.querySelector(".menu-main")
+        iconFile.addEventListener("click", function(event) {
+            menuFile.focus()
+            picker.setVisible(true);
+        })
+        iconHelp.addEventListener("click", function(event) {
+            menuHelp.focus()
+        })
+        iconMain.addEventListener("click", function(event) {
+            menuMain.focus()
+        })
+        </script>
     </body>
 </html>
