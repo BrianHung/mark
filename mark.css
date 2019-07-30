@@ -1,3 +1,7 @@
+/*  ============================================================================
+    Body
+ */
+
 @import url('https://rsms.me/inter/inter.css');
 html
 {
@@ -24,7 +28,7 @@ body
     padding: 2em 0;
     background: #ffffff;
     color: black;
-    line-height: 1.1;
+    line-height: 1.8;
     height: 100%;
 }
 body::-webkit-scrollbar {
@@ -34,11 +38,34 @@ pre
 {
     padding: 1em 1em;
     border-radius: 5px;
-    line-height: 1.2em;
+    line-height: 1.8;
     box-sizing: border-box;
     width: 100%;
     background: #fff;
 }
+p > code
+{
+    /* background: linear-gradient(to right,#fce4ed,#ffe8cc); */
+    background: linear-gradient(to right,#83cff3,#ebf8e1);
+    padding: .1rem .3rem .2rem;
+    border-radius: .2rem;
+}
+mark {
+    background: #fcf3cf;
+}
+
+blockquote
+{
+    border-left: .25em solid #dfe2e5;
+    color: #6a737d;
+    padding: 0 1em;
+    margin-left: 0em;
+}
+
+
+/*  ============================================================================
+    Cell
+ */
 .cell
 {
     box-sizing: border-box;
@@ -68,6 +95,12 @@ pre
 {
     box-shadow: inset 3px 0 0 0 #30d158;
 }
+
+
+/*  ============================================================================
+    Cell Editor
+ */
+
 .cell-editor
 {
     /* display is explicitly set for displayEditor */
@@ -79,7 +112,7 @@ pre
     outline: none;
     border-radius: 5px;
     background-color: #f1f0f0;
-    line-height: 1.5;
+    line-height: 1.8;
 }
 .cell-editor: focus
 {
@@ -87,6 +120,11 @@ pre
     border-color: #719ECE;
     box-shadow: 0 0 10px #719ECE;
 }
+
+
+/*  ============================================================================
+    Cell Render
+ */
 .cell-render
 {
     /* display is explicitly set for displayEditor */
@@ -97,11 +135,19 @@ pre
     border-radius: 5px;
     outline: none;
     transition-duration: 0.2s;
+    line-height: 1.8;
 }
+/*
 .cell-render:hover {
     background-color: #F5F8FA;
     background-color: #f1f0f0;
     transition-property: background-color;
+}*/
+.cell-render ::selection {
+    background-color: #fcf3cf;
+}
+.cell-render img {
+    max-width: 100%;
 }
 .cell-render a
 {
@@ -110,15 +156,15 @@ pre
 }
 .cell-render h1
 {
-    font-size: 2.5em;
+    font-size: 2.0em;
 }
 .cell-render h2
 {
-    font-size: 2.0em;
+    font-size: 1.50em;
 }
 .cell-render h3
 {
-    font-size: 1.5em;
+    font-size: 1.25em;
 }
 .cell-render a:hover {
     opacity: .7;
@@ -154,6 +200,10 @@ pre
 .cell-render tbody {
     border-bottom: 1px solid #bfbfbf;
 }
+
+/*  ============================================================================
+    CodeMirror
+ */
 .CodeMirror
 {
     height: auto;
@@ -175,24 +225,10 @@ pre
     color: #20a5ba;
 }
 
-p > code
-{
-    /* background: linear-gradient(to right,#fce4ed,#ffe8cc); */
-    background: linear-gradient(to right,#83cff3,#ebf8e1);
-    padding: .1rem .3rem .2rem;
-    border-radius: .2rem;
-}
-mark {
-    background: #ffe500;
-}
 
-blockquote
-{
-    border-left: .25em solid #dfe2e5;
-    color: #6a737d;
-    padding: 0 1em;
-    margin-left: 0em;
-}
+/*  ============================================================================
+    Highlight JS
+ */
 .hljs {
     display: block;
     overflow-x: auto;
@@ -293,6 +329,7 @@ pre.hljs
 {
     height: 32px;
     fill: #AEAEB2;
+    z-index: 2;
 }
 .icon:hover
 {
@@ -302,6 +339,10 @@ pre.hljs
 {
     margin-right: 4px;
 }
+
+/*  ============================================================================
+    Menu
+ */
 .menu
 {
     position: absolute;
@@ -314,7 +355,7 @@ pre.hljs
     border-radius: 5px;
     padding: 0px;
     box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27,39,51,0.08);
-    transition: opacity 0.2s ease-out;
+    transition: opacity 0.2s ease-in-out;
     min-width: 300px;
     max-height: 90vh;
     z-index: -1;
@@ -335,6 +376,7 @@ pre.hljs
 {
     opacity: 1;
     z-index: 10;
+    transition: all 0.2s ease-in-out;
 }
 .menu:focus-within > *
 {

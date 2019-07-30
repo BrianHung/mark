@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
 
-        <title>Mark</title>
+        <title>OneMark</title>
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400">
 
@@ -40,14 +41,8 @@
                 <div style="position: relative;">
                     <div class="menu menu-file" tabindex="-1" style="left: 0;">
                         <h3 class="menu-head">File</h3>
-                        <ul class="menu-list">
-                            <li class="list-line"><hr></li>
-                            <li></li>
-                            <li class="list-line"><hr></li>
-                            <li></li>
-                            <li></li>
-                            <li class="list-line"><hr></li>
-                        </ul>
+                        <div class="gdrive">
+                        </div>
                     </div>
                 </div>
                 <div style="float: right;">
@@ -210,16 +205,26 @@
                 // Create and render a Picker object for picking user Photos.
                  function createPicker() {
                      if (pickerApiLoaded && oauthToken) {
+
+                         var docs = new google.picker.DocsView(google.picker.ViewId.DOCS)
+                         docs.setMimeTypes("application/json,application/pdf")
+                         docs.setMode(google.picker.DocsViewMode.LIST)
+                         docs.setParent("1fJ919_VDTk3hgn95x8CBXbsvcTFnojv-")
+
                          picker = new google.picker.PickerBuilder().
-                         addView(new google.picker.DocsUploadView()).
-                         addView(google.picker.ViewId.DOCUMENTS).
-                         addView(google.picker.ViewId.FOLDERS).
-                         addView(google.picker.ViewId.PDFS).
-                         addView(google.picker.ViewId.RECENTLY_PICKED).
-                         setOAuthToken(oauthToken).
-                         setDeveloperKey(pickerKey).
-                         setCallback(pickerCallback).
-                         build();
+                             addView(docs).
+                             addView(new google.picker.DocsUploadView()).
+                             setOAuthToken(oauthToken).
+                             setDeveloperKey(pickerKey).
+                             setCallback(pickerCallback).
+                             toUri()
+
+                         var iframe = document.createElement('iframe')
+                         iframe.src = picker
+                         iframe.style.height = "100vh"
+                         iframe.style.width =  "300px"
+                         iframe.style.fontSize = "11px"
+                         document.querySelector(".gdrive").appendChild(iframe)
 
                    }
                  }
