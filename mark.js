@@ -280,11 +280,13 @@ function EventListener(body) {
 
     body.addEventListener("dblclick", function(event) {
         // Check if target is within a cell element.
+        /*
         let cell = event.target.closest(".cell")
         if (cell == null) {
             body.dispatchEvent(new KeyboardEvent('keydown', {
                 code: "Enter", shiftKey: true
             }))
         }
+        */
     })
 }
