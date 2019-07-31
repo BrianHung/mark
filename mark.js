@@ -174,6 +174,7 @@ function EventListener(body) {
                         } else {
                             let next = cell.nextElementSibling
                             if (next == null || next.className != "cell") {
+                                event.preventDefault()
                                 cell = addCell(body, next)
                             } else {
                                 next.focus()

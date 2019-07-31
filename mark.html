@@ -37,23 +37,23 @@
 
     <body>
         <div class="footer">
-            <div style="position: fixed; left: 0px; margin-left: 16px; bottom: 16px;">
-                <div style="position: relative;">
+            <div class="footer-menu" style="float: left;">
+                <div class="menu-wrap">
                     <div class="menu menu-file" tabindex="-1" style="left: 0;">
                         <h3 class="menu-head">Files</h3>
-                        <ul class="menu-list">
-                            <li>
+                            <div class="menu-search">
                                 <span class="input-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="black" width="16" height="44" viewBox="0 0 16 44"><path d="M15.27 28.29l-4.06-4.06a6.113 6.113 0 0 0 1.35-3.83c0-3.39-2.76-6.15-6.15-6.15-3.39 0-6.15 2.76-6.15 6.15s2.76 6.15 6.15 6.15c1.43 0 2.75-.5 3.8-1.33l4.06 4.06 1-.99zM6.4 25.33a4.93 4.93 0 0 1-4.92-4.92c0-2.71 2.2-4.92 4.92-4.92s4.92 2.21 4.92 4.92c.01 2.71-2.2 4.92-4.92 4.92z" fill="currentColor"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="44" viewBox="0 0 16 44">
+                                        <path d="M15.27 28.29l-4.06-4.06a6.113 6.113 0 0 0 1.35-3.83c0-3.39-2.76-6.15-6.15-6.15-3.39 0-6.15 2.76-6.15 6.15s2.76 6.15 6.15 6.15c1.43 0 2.75-.5 3.8-1.33l4.06 4.06 1-.99zM6.4 25.33a4.93 4.93 0 0 1-4.92-4.92c0-2.71 2.2-4.92 4.92-4.92s4.92 2.21 4.92 4.92c.01 2.71-2.2 4.92-4.92 4.92z"/>
+                                    </svg>
                                 </span>
-                                <input type="text" class="search-bar" placeholder="Quick Search">
-                            </li>
-                            <li><ul class="tree-list">
-                            </ul></li>
+                                <input type="text" class="search-bar" placeholder="Search">
+                            </div>
+                        <ul class="tree-list">
                         </ul>
                     </div>
                 </div>
-                <div style="float: right;">
+                <div class="footer-icon">
                     <svg class="icon icon-file" viewBox="0 0 32 32" fill="currentColor" stroke="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="32" height="32">
                         <circle r="2.0" cx=" 8" cy="16"></circle>
                         <circle r="2.0" cx="16" cy="16"></circle>
@@ -61,8 +61,8 @@
                     </svg>
                 </div>
             </div>
-            <div style="position: fixed; right: 0px; margin-right: 16px; bottom: 16px;">
-                <div style="position: relative;">
+            <div class="footer-menu" style="float:right;">
+                <div class="menu-wrap">
                     <div class="menu menu-help" tabindex="-1">
                         <h3 class="menu-head">Shortcuts</h3>
                         <ul class="menu-list">
@@ -149,7 +149,7 @@
                         </ul>
                     </div>
                 </div>
-                <div style="float: right;">
+                <div class="footer-icon" style="right: 0px">
                     <svg class="icon icon-help" viewBox="0 0 32 32"><path d="M4 11c0-1.65 1.29-3 2.867-3h17.266C25.72 8 27 9.344 27 11v10c0 1.652-1.29 3-2.867 3H6.867C5.28 24 4 22.656 4 21V11zm2 10c0 .555.422 1 .942 1h17.116c.51 0 .942-.448.942-1V11c0-.555-.422-1-.942-1H6.942c-.51 0-.942.448-.942 1v10zm2-5.8c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2H8.2c-.11 0-.2-.086-.2-.2v-1.6zm14-3c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-6 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2H7.2c-.11 0-.2-.086-.2-.2v-1.6zm3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm1 3c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm3 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-13 3c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2H7.2c-.11 0-.2-.086-.2-.2v-1.6zm15 0c0-.11.086-.2.2-.2h1.6c.11 0 .2.086.2.2v1.6c0 .11-.086.2-.2.2h-1.6c-.11 0-.2-.086-.2-.2v-1.6zm-12 0c0-.11.095-.2.19-.2h10.62c.105 0 .19.086.19.2v1.6c0 .11-.095.2-.19.2H10.19a.193.193 0 0 1-.19-.2v-1.6z"></path></svg>
                     <svg class="icon icon-main" viewBox="0 0 32 32"><path d="M5 16C5 9.925 9.924 5 16 5c6.075 0 11 4.924 11 11 0 6.075-4.924 11-11 11-6.075 0-11-4.924-11-11zm1.913 0A9.086 9.086 0 0 0 16 25.087 9.086 9.086 0 0 0 25.087 16 9.086 9.086 0 0 0 16 6.913 9.086 9.086 0 0 0 6.913 16zm10.042 5.26h-2.076v-1.874h2.076v1.875zm.656-7.82c0-.83-.563-1.406-1.513-1.406-1.032 0-1.768.616-1.755 2.09h-1.727c-.04-2.09 1.259-3.536 3.495-3.536 2.303 0 3.267 1.299 3.267 2.759 0 1.285-.589 1.955-1.406 2.638l-.763.63c-.375.307-.495.428-.495.896v.603h-1.58v-.857c0-.857.187-1.058.897-1.66l.723-.603c.535-.442.857-.844.857-1.554z" fill-rule="evenodd"></path></svg>
                 </div>
@@ -314,14 +314,22 @@
         const menuFile = document.querySelector(".menu-file")
         const menuHelp = document.querySelector(".menu-help")
         const menuMain = document.querySelector(".menu-main")
+        function toggle(element) {
+            if (element.visible) {
+                element.visible = false
+            } else {
+                element.visible = true
+                element.focus()
+            }
+        }
         iconFile.addEventListener("click", function(event) {
-            menuFile.focus()
+            toggle(menuFile)
         })
         iconHelp.addEventListener("click", function(event) {
-            menuHelp.focus()
+            toggle(menuHelp)
         })
         iconMain.addEventListener("click", function(event) {
-            menuMain.focus()
+            toggle(menuMain)
         })
         </script>
     </body>
