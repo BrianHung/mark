@@ -60,10 +60,15 @@ function saveTextAsMark() {
  * @return undefined
  */
 function initPgFromJson(body, json) {
+
+    for(let cell of document.querySelectorAll(".cell")) {
+        cell.parentNode.removeChild(cell)
+    }
+
     let cells = json.cells
     for(let c of cells) {
         let o = Object.assign({}, defaultOptions, {mode: c.cell_type, value: c.source})
-        addCell(body, mirrorOptions=o, editing=c.editing)
+        addCell(body, null, mirrorOptions=o, editing=c.editing)
     }
 }
 /**
@@ -74,7 +79,7 @@ function initPgFromMark(body, text) {
     let texts = text.split("\n<br>\n")
     for(let t of texts) {
         let o = Object.assign({}, defaultOptions, {mode: "gfm", value: t})
-        addCell(body, mirrorOptions=o, editing=true)
+        addCell(body, null, mirrorOptions=o, editing=true)
     }
 }
 
@@ -89,12 +94,14 @@ function addCell(parent, nextCell=null, mirrorOptions=defaultOptions, editing=tr
 
     // Insert cell into view before CodeMirror (prevents default).
     let cell = temp.firstChild
-    parent.insertBefore(cell, nextCell)
+    parent.insertBefore(cell, null)
 
     // Create CodeMirror instance for cell.
     let mirror = CodeMirror(cell, mirrorOptions)
+    console.log(mirrorOptions)
     mirror.getWrapperElement().className += " " + "cell-editor"
     mirror.refresh()
+    console.log(mirror.getValue())
 
     // Create shorthands to reference editor and render.
     cell.editor = cell.querySelector(".cell-editor")

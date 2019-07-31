@@ -3,9 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
         <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico'/>
 
-        <title>OneMark 🧠🤖</title>
+        <title>OneMark</title>
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400">
 
@@ -213,6 +215,20 @@
                                     if (files.length > 0) {
                                         home_id = files[0].id
                                         searchFiles()
+                                    } else {
+                                        gapi.client.drive.files.create({
+                                            resource: {
+                                                'name': 'OneMark',
+                                                'mimeType': 'application/vnd.google-apps.folder',
+                                            },
+                                            fields: 'id'
+                                        }, function(error, file) {
+                                            if (error) {
+                                                console.log(error)
+                                            } else {
+                                                home_id = file.id
+                                            }
+                                        })
                                     }
                                 })
                             })
@@ -223,6 +239,22 @@
                 }
 
 
+
+                function getDefault(name='default') {
+                    gapi.client.load("drive", "v3", function() {
+                        gapi.client.drive.files.list({
+                            q: `'${home_id}' in parents and name='${name}'`
+                        }).then(function(response) {
+                            var files = response.result.files;
+                            let tree  = document.querySelector(".tree-list")
+                            for(let file of files) {
+                                let temp = document.createElement("div")
+                                temp.innerHTML = `<li class="tree-item">${file.name}</li>`
+                                tree.appendChild(temp.firstChild)
+                            }
+                        })
+                    })
+                }
 
 
                 function listFiles() {
@@ -296,12 +328,44 @@
                     q: `'${home_id}' in parents`
                 }).then(function(response) {
                     var files = response.result.files;
+                    console.log(files)
                     let tree  = document.querySelector(".tree-list")
                     for(let file of files) {
                         let temp = document.createElement("div")
                         temp.innerHTML = `<li class="tree-item">${file.name}</li>`
                         tree.appendChild(temp.firstChild)
                     }
+                })
+            })
+        }
+
+        function getFile(fileId) {
+            gapi.client.load("drive", "v3", function() {
+
+                let request = gapi.client.drive.files.get({
+                    fileId: fileId,
+                    alt: 'json',
+                    fields: 'webContentLink'
+                })
+
+                request.execute(function(jsonResp, rawResp) {
+                    console.log(jsonResp, rawResp)
+                })
+            })
+        }
+
+        function getJSON(fileId) {
+            gapi.client.load("drive", "v3", async function() {
+
+                let request = gapi.client.drive.files.get({
+                    fileId: fileId,
+                    alt: 'media',
+                    fields: 'webContentLink'
+                })
+
+                request.execute(function(jsonResp, rawResp) {
+                    console.log(jsonResp, rawResp)
+                    return initPgFromJson(document.body, jsonResp)
                 })
             })
         }
