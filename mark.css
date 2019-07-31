@@ -434,6 +434,7 @@ pre.hljs
     list-style-type: none;
     line-height: normal;
     padding: 8px 16px;
+    position: relative;
 }
 
 .menu-list li:hover
@@ -459,4 +460,32 @@ pre.hljs
 .button-div {
     display: flex;
     align-items: center;
+}
+
+.menu-file {
+    height: 100vh;
+    background-color: #f2f2f7;
+}
+
+.tree-item
+{
+    list-style-type: none;
+}
+
+.search-bar {
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+    line-height: 1.8;
+    border: none;
+    padding: 0.5em;
+    padding-left: 2em;
+    box-sizing: border-box;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1.2em;
+    fill: gray;
+    top: 0;
 }

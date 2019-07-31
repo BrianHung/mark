@@ -40,9 +40,17 @@
             <div style="position: fixed; left: 0px; margin-left: 16px; bottom: 16px;">
                 <div style="position: relative;">
                     <div class="menu menu-file" tabindex="-1" style="left: 0;">
-                        <h3 class="menu-head">File</h3>
-                        <div class="gdrive">
-                        </div>
+                        <h3 class="menu-head">Files</h3>
+                        <ul class="menu-list">
+                            <li>
+                                <span class="input-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="black" width="16" height="44" viewBox="0 0 16 44"><path d="M15.27 28.29l-4.06-4.06a6.113 6.113 0 0 0 1.35-3.83c0-3.39-2.76-6.15-6.15-6.15-3.39 0-6.15 2.76-6.15 6.15s2.76 6.15 6.15 6.15c1.43 0 2.75-.5 3.8-1.33l4.06 4.06 1-.99zM6.4 25.33a4.93 4.93 0 0 1-4.92-4.92c0-2.71 2.2-4.92 4.92-4.92s4.92 2.21 4.92 4.92c.01 2.71-2.2 4.92-4.92 4.92z" fill="currentColor"/></svg>
+                                </span>
+                                <input type="text" class="search-bar" placeholder="Quick Search">
+                            </li>
+                            <li><ul class="tree-list">
+                            </ul></li>
+                        </ul>
                     </div>
                 </div>
                 <div style="float: right;">
@@ -155,48 +163,88 @@
 
             // The Browser API key obtained from the Google API Console.
             var pickerKey = "AIzaSyCVoUn8BeFWqDN8oUkdSfb3O71ZkNvwS8s"
-            // AIzaSyBL09MBSofA7a9vWTOU60TFwGxe9FrDnPY
             // The Client ID obtained from the Google API Console.
-            var clientId  = "619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln.apps.googleusercontent.com"
+            var clientId  = "619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln"
 
             var pickerApiLoaded = false
             var oauthToken
             var googleAuth
             var googleUser
 
+            var gdrivedocs = "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+
             var picker
+            var client
+            var home_id
 
             function initClient() {
 
-                gapi.load('auth2', function() {
+                gapi.load('client:auth2', function() {
                     // Initialize auth with client settings.
-                    googleAuth = gapi.auth2.init({
-                        client_id: clientId,
-                        cookiepolicy: 'single_host_origin',
+                    gapi.client.init({
+                        client_id: `${clientId}.apps.googleusercontent.com`,
                         fetch_basic_profile: true,
                         scope: "https://www.googleapis.com/auth/drive",
                         ux_mode: "redirect",
+                    }).then(function() {
+                        googleAuth = gapi.auth2.getAuthInstance()
+                        // Add method to sign in user if not signed in.
+                        googleAuth.attachClickHandler(document.querySelector(".button"))
+                        // Add method to handle authentication.
+                        googleAuth.isSignedIn.listen(handleAuth)
+                        // Handle authentication for the initial state.
+                        handleAuth(googleAuth.isSignedIn.get())
+
                     })
-                    // Add method to sign in user if not signed in.
-                    googleAuth.attachClickHandler(document.querySelector(".button"))
-                    // Add method to assign currentUser to googleUser.
-                    googleAuth.currentUser.listen(userAuth)
                 })
 
-                function userAuth(currentUser) {
-                    // Assign currentUser to googleUser if signed in.
-                    if (currentUser.isSignedIn()) {
-                        googleUser = currentUser
-                        handleAuthResult(googleUser.getAuthResponse())
+
+                function handleAuth(isSignedIn) {
+                    if (isSignedIn) {
+                        googleUser = googleAuth.currentUser.get()
+                        let authResult = googleUser.getAuthResponse()
+                        if (authResult && !authResult.error) {
+                            oauthToken = authResult.access_token
+                            gapi.client.load("drive", "v3", function() {
+                                gapi.client.drive.files.list({
+                                    q: "name = 'OneMark' and mimeType = 'application/vnd.google-apps.folder'"
+                                }).then(function(response) {
+                                    var files = response.result.files;
+                                    if (files.length > 0) {
+                                        home_id = files[0].id
+                                        searchFiles()
+                                    }
+                                })
+                            })
+
+                        }
+
                     }
                 }
-                function handleAuthResult(authResult) {
-                    if (authResult && !authResult.error) {
-                      oauthToken = authResult.access_token
-                      createPicker();
-                  }
+
+
+
+
+                function listFiles() {
+                  gapi.client.drive.files.list({
+                    'pageSize': 10,
+                    'fields': "nextPageToken, files(id, name)"
+                  }).then(function(response) {
+                    appendPre('Files:');
+                    var files = response.result.files;
+                    if (files && files.length > 0) {
+                      for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        appendPre(file.name + ' (' + file.id + ')');
+                      }
+                    } else {
+                      appendPre('No files found.');
+                    }
+                  });
                 }
 
+
+                /*
                 gapi.load('picker', function() {
                     pickerApiLoaded = true
                     createPicker()
@@ -239,7 +287,25 @@
                      var message = 'You picked: ' + url;
                      console.log(message)
                  }
-            }
+                 */
+        }
+
+        function searchFiles() {
+            gapi.client.load("drive", "v3", function() {
+                gapi.client.drive.files.list({
+                    q: `'${home_id}' in parents`
+                }).then(function(response) {
+                    var files = response.result.files;
+                    let tree  = document.querySelector(".tree-list")
+                    for(let file of files) {
+                        let temp = document.createElement("div")
+                        temp.innerHTML = `<li class="tree-item">${file.name}</li>`
+                        tree.appendChild(temp.firstChild)
+                    }
+                })
+            })
+        }
+
         </script>
         <script>
         const iconFile = document.querySelector(".icon-file")
@@ -250,7 +316,6 @@
         const menuMain = document.querySelector(".menu-main")
         iconFile.addEventListener("click", function(event) {
             menuFile.focus()
-            picker.setVisible(true);
         })
         iconHelp.addEventListener("click", function(event) {
             menuHelp.focus()
