@@ -344,8 +344,8 @@ pre.hljs
 .footer-icon
 {
     position: fixed;
-    margin: 0 16px;
-    bottom: 16px;
+    margin: 16px 16px;
+    bottom: 0;
     z-index: 100;
 }
 .icon
@@ -383,6 +383,7 @@ pre.hljs
     z-index: -1;
     overflow: scroll;
     scrollbar-width: none;
+    background-color: white;
     /*
     opacity: 1;
     z-index: 11;
@@ -396,18 +397,13 @@ pre.hljs
 @media only screen and (max-width: 768px) {
     .menu {
         width: 100vw;
-        max-height: 100vh;
         height: 100%;
         margin: 0;
-        bottom: 0px;
+        top: 0px;
+        box-shadow: none;
     }
     .menu-wrap {
         position: static;
-    }
-    .menu-help
-    {
-        bottom: 80px;
-        height: calc(100vh - 80px);
     }
 }
 .menu::-webkit-scrollbar {
@@ -429,7 +425,7 @@ pre.hljs
 .menu:focus-within > *
 {
     opacity: 1;
-    z-index: 11;
+    z-index: 15;
     display: block;
 }
 .menu p, .menu blockquote
