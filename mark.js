@@ -2,8 +2,8 @@
  * Displays the editor.
  * @return undefined
  */
-function displayEditor(cell) {
-    if (cell.editing) {
+function displayEditor(cell, focus=true) {
+    if(cell.editing) {
         cell.editor.style.display =  "none"
         cell.render.style.display =  "block"
         cell.editing = false
@@ -146,7 +146,7 @@ const defaultOptions = {
             cm.setOption("fullScreen",  !cm.getOption("fullScreen"))
         },
         "Esc": function(cm) {
-            if (cm.getOption("fullScreen")) {
+            if(cm.getOption("fullScreen")) {
                 cm.setOption("fullScreen", false)
             }
         }
@@ -159,12 +159,12 @@ function EventListener(body) {
         // Event target is with-in a cell element.
         console.log(event, event.code, event.shiftKey, event.target)
         let cell = event.target.closest(".cell")
-        if (cell != null) {
+        if(cell != null) {
             switch(event.code) {
                 case "Backspace":
-                    if (event.shiftKey) {
+                    if(event.shiftKey) {
                         let prev = cell.previousElementSibling
-                        if (prev != null && prev.className == "cell") {
+                        if(prev != null && prev.className == "cell") {
                             prev.focus()
                         }
                         cell.parentElement.removeChild(cell)
@@ -172,15 +172,15 @@ function EventListener(body) {
                     break
                 case "Enter":
                     console.log("enter")
-                    if (event.shiftKey) {
+                    if(event.shiftKey) {
                         // Display render if not displayed.
                         console.log(cell, cell.editing)
-                        if (cell.editing) {
+                        if(cell.editing) {
                             displayRender(cell)
                         // Focus on next cell if render is displayed.
                         } else {
                             let next = cell.nextElementSibling
-                            if (next == null || next.className != "cell") {
+                            if(next == null || next.className != "cell") {
                                 event.preventDefault()
                                 cell = addCell(body, next)
                             } else {
@@ -189,7 +189,7 @@ function EventListener(body) {
                         }
                     } else {
                         // Check editor if not displayed.
-                        if (!cell.editing) {
+                        if(!cell.editing) {
                             // Prevent enter from creating new line.
                             event.preventDefault()
                             displayEditor(cell)
@@ -197,15 +197,15 @@ function EventListener(body) {
                     }
                     break
                 case "Escape":
-                    if (cell.editing) {
+                    if(cell.editing) {
                         cell.focus()
                     }
                     break
                 case "ArrowUp":
-                    if (event.shiftKey) {
-                        if (!cell.editing) {
+                    if(event.shiftKey) {
+                        if(!cell.editing) {
                             let prev = cell.previousElementSibling
-                            if (prev != null && prev.className == "cell") {
+                            if(prev != null && prev.className == "cell") {
                                 cell.parentElement.insertBefore(cell, prev)
                                 cell.focus()
                             }
@@ -217,11 +217,11 @@ function EventListener(body) {
                         let charNum = 0
                         // This triggers because of a CodeMirror key event.
                         let frstLine = (cursor.line == lineNum && cursor.ch == charNum)
-                        if (!cell.editing || frstLine) {
+                        if(!cell.editing || frstLine) {
                             let prev = cell.previousElementSibling
-                            if (prev != null && prev.className == "cell") {
+                            if(prev != null && prev.className == "cell") {
                                 // Focus on prev editor if displayed.
-                                if (prev.editing) {
+                                if(prev.editing) {
                                     let mirror = prev.editor.CodeMirror
                                     mirror.focus()
                                 } else {
@@ -232,10 +232,10 @@ function EventListener(body) {
                     }
                     break
                 case "ArrowDown":
-                    if (event.shiftKey) {
-                        if (!cell.editing) {
+                    if(event.shiftKey) {
+                        if(!cell.editing) {
                             let next = cell.nextElementSibling
-                            if (next != null && next.className == "cell") {
+                            if(next != null && next.className == "cell") {
                                 next.parentElement.insertBefore(next, cell)
                                 cell.focus()
                             }
@@ -247,11 +247,11 @@ function EventListener(body) {
                         let charNum = mirror.getLine(lineNum).length
                         // This triggers because of a CodeMirror key event.
                         let lastLine = (cursor.line == lineNum && cursor.ch == charNum)
-                        if (!cell.editing || lastLine) {
+                        if(!cell.editing || lastLine) {
                             let next = cell.nextElementSibling
-                            if (next != null && next.className == "cell") {
+                            if(next != null && next.className == "cell") {
                                 // Focus on prev editor if displayed.
-                                if (next.editing) {
+                                if(next.editing) {
                                     let mirror = next.editor.CodeMirror
                                     mirror.focus()
                                 } else {
@@ -275,9 +275,9 @@ function EventListener(body) {
         } else {
             switch (event.code) {
                 case "Enter":
-                    if (event.shiftKey) {
+                    if(event.shiftKey) {
                         cell = document.querySelector(".cell")
-                        if (cell == null) {
+                        if(cell == null) {
                             cell = addCell(body)
                         }
                     }
@@ -290,7 +290,7 @@ function EventListener(body) {
         // Check if target is within a cell element.
         /*
         let cell = event.target.closest(".cell")
-        if (cell == null) {
+        if(cell == null) {
             body.dispatchEvent(new KeyboardEvent('keydown', {
                 code: "Enter", shiftKey: true
             }))

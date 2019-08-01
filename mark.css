@@ -26,7 +26,9 @@ html
 :root {
     --lite-gray: #f2f2f7;
     --dark-gray: #8e8e93;
-    --highlight: #fcf3cf
+    --lite-high: #fcf3cf;
+    --dark-high: rgba(253, 205, 44, 0.65);
+    --lite-blue: rgba(10, 132, 255, 0.2);
 }
 body
 {
@@ -57,7 +59,7 @@ p > code
     border-radius: .2rem;
 }
 mark {
-    background: var(--highlight);
+    background: var(--dark-high);
 }
 
 blockquote
@@ -150,7 +152,7 @@ blockquote
     transition-property: background-color;
 }*/
 .cell-render ::selection {
-    background-color: var(--highlight);
+    background-color: var(--dark-high);
 }
 .cell-render hr {
     margin: 0;
@@ -467,6 +469,11 @@ pre.hljs
     margin: 5px 16px;
     margin-top: 10px;
 }
+@media only screen and (max-width: 768px) {
+    .menu-head {
+        font-size: 1.5em;
+    }
+}
 .menu-list
 {
     padding: 0px;
@@ -541,11 +548,21 @@ pre.hljs
 }
 
 .tree-item {
-    padding: 8px 16px;
+    padding: 8px 16px 8px 40px;
+    background-image: url(img/file.svg);
+    background-repeat: no-repeat;
+    background-size: 1em;
+    background-position-y: center;
+    background-position-x: 16px;
+}
+
+.tree-item.selected
+{
+    color: black;
+    background-color: var(--dark-high);
 }
 
 .tree-item:hover {
-    font-color: var(--dark-gray);
     background-color: var(--lite-gray);
 }
 

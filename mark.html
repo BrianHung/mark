@@ -48,7 +48,7 @@
             <div class="footer-menu" style="float: left;">
                 <div class="menu-wrap">
                     <div class="menu menu-file" tabindex="-1" style="left: 0;">
-                        <h3 class="menu-head">Files</h3>
+                        <h3 class="menu-head">Browse</h3>
                             <div class="menu-search">
                                 <span class="input-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="44" viewBox="0 0 16 44">
@@ -255,7 +255,7 @@
                             let tree  = document.querySelector(".tree-list")
                             for(let file of files) {
                                 let temp = document.createElement("div")
-                                temp.innerHTML = `<li class="tree-item">${file.name}</li>`
+                                temp.innerHTML = `<li class="tree-item"><button class="button-hidden">${file.name}</button></li>`
                                 tree.appendChild(temp.firstChild)
                             }
                         })
@@ -338,7 +338,7 @@
                     let tree  = document.querySelector(".tree-list")
                     for(let file of files) {
                         let temp = document.createElement("div")
-                        temp.innerHTML = `<li class="tree-item">${file.name}</li>`
+                        temp.innerHTML = `<li class="tree-item"><button class="button-hidden" data-id="${file.id}" onclick="selectFile(this)">${file.name}</button></li>`
                         tree.appendChild(temp.firstChild)
                     }
                 })
@@ -374,6 +374,17 @@
                     return initPgFromJson(document.body, jsonResp)
                 })
             })
+        }
+
+
+
+        function selectFile(meti) {
+            // Remove active from all tree items.
+            for(let item of document.querySelectorAll(".tree-item")) {
+                item.classList.remove("active")
+            }
+            meti.parentElement.classList.add("active")
+            getJSON(meti.getAttribute("data-id"))
         }
 
         </script>
