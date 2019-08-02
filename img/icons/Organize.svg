@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="84" height="84" viewBox="0 0 84 84">
+  <defs>
+    <clipPath id="clip-_3x_6">
+      <rect width="84" height="84"/>
+    </clipPath>
+  </defs>
+  <g id="_3x_6" data-name="@3x – 6" clip-path="url(#clip-_3x_6)">
+    <g id="Group_89" data-name="Group 89" transform="translate(-7510.292 3910.113)">
+      <path id="Path_36" data-name="Path 36" d="M7579.292-3888.113h-34l-4.26-4.381a2.1,2.1,0,0,0-1.494-.619h-14.246a4,4,0,0,0-4,4v43a4,4,0,0,0,4,4h54a4,4,0,0,0,4-4v-38A4,4,0,0,0,7579.292-3888.113Zm-54-2h13.878l4.091,4.092a3.091,3.091,0,0,0,2.2.908h33.834a1,1,0,0,1,1,1v4.142a3.981,3.981,0,0,0-1-.142h-54a3.969,3.969,0,0,0-1,.142v-9.142A1,1,0,0,1,7525.292-3890.113Zm0,45a1,1,0,0,1-1-1v-30a1,1,0,0,1,1-1h54a1,1,0,0,1,1,1v30a1,1,0,0,1-1,1Z"/>
+    </g>
+  </g>
+</svg>
