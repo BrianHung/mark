@@ -2,16 +2,16 @@
  * Displays the editor.
  * @return undefined
  */
-function displayEditor(cell, focus=true) {
-    if(cell.editing) {
+function displayEditor(cell) {
+    if (cell.editing) {
         cell.editor.style.display =  "none"
         cell.render.style.display =  "block"
-        cell.editing = false
+        cell.editing = !cell.editing
         cell.focus()
     } else {
         cell.render.style.display =  "none"
         cell.editor.style.display =  "block"
-        cell.editing = true
+        cell.editing = !cell.editing
         cell.editor.CodeMirror.focus()
     }
 }
@@ -59,7 +59,7 @@ function saveTextAsMark() {
  * Initializes the page from json representation.
  * @return undefined
  */
-function initPgFromJson(body, json) {
+function initPageFmJson(body, json) {
 
     for(let cell of document.querySelectorAll(".cell")) {
         cell.parentNode.removeChild(cell)
@@ -75,7 +75,7 @@ function initPgFromJson(body, json) {
  * Initializes the page from mark representation.
  * @return undefined
  */
-function initPgFromMark(body, text) {
+function initPageFmMark(body, text) {
     let texts = text.split("\n<br>\n")
     for(let t of texts) {
         let o = Object.assign({}, defaultOptions, {mode: "gfm", value: t})
@@ -98,10 +98,8 @@ function addCell(parent, nextCell=null, mirrorOptions=defaultOptions, editing=tr
 
     // Create CodeMirror instance for cell.
     let mirror = CodeMirror(cell, mirrorOptions)
-    console.log(mirrorOptions)
     mirror.getWrapperElement().className += " " + "cell-editor"
     mirror.refresh()
-    console.log(mirror.getValue())
 
     // Create shorthands to reference editor and render.
     cell.editor = cell.querySelector(".cell-editor")

@@ -51,6 +51,10 @@ pre
     width: 100%;
     background: #fff;
 }
+code
+{
+    font-family: "Fira Mono", monospace;
+}
 p > code
 {
     /* background: linear-gradient(to right,#fce4ed,#ffe8cc); */
@@ -145,12 +149,6 @@ blockquote
     transition-duration: 0.2s;
     line-height: 1.8;
 }
-/*
-.cell-render:hover {
-    background-color: #F5F8FA;
-    background-color: #f1f0f0;
-    transition-property: background-color;
-}*/
 .cell-render ::selection {
     background-color: var(--dark-high);
 }
@@ -378,18 +376,14 @@ pre.hljs
     margin: 16px 16px;
     border-radius: 5px;
     padding: 0px;
-    box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27,39,51,0.08);
-    transition: opacity 0.2s ease-in-out;
+    box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27, 39, 51,0.08);
     min-width: 300px;
     max-height: calc(100vh - 96px);
     z-index: -1;
     overflow: scroll;
     scrollbar-width: none;
     background-color: white;
-    /*
-    opacity: 1;
-    z-index: 11;
-    display: block;*/
+    transition: opacity 0.2s ease-out;
 }
 .menu-wrap
 {
@@ -422,7 +416,6 @@ pre.hljs
 {
     opacity: 1;
     z-index: 10;
-    transition: all 0.2s ease-in-out;
 }
 .menu:focus-within > *
 {
@@ -438,11 +431,13 @@ pre.hljs
 .menu .button
 {
     width: 100%;
-    height: 30px;
+    height: 40px;
     outline: none;
     background-color: white;
     border: 1px solid #f1f0f0;
     border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
 }
 .menu .button-hidden {
     width: 100%;
@@ -459,10 +454,20 @@ pre.hljs
 {
     border: 1px solid #C7C7CC;
 }
+.menu .button:active
+{
+    background-color: var(--lite-high);
+    transform: translateY(2px);
+}
 .menu .button .button-text
 {
     position: relative;
-    bottom: 8px;
+    bottom: 2px;
+}
+.menu .button .button-icon
+{
+    position: relative;
+    bottom: -5px;
 }
 .menu-head
 {
@@ -556,10 +561,10 @@ pre.hljs
     background-position-x: 16px;
 }
 
-.tree-item.selected
+.tree-item.active
 {
     color: black;
-    background-color: var(--dark-high);
+    background-color: var(--dark-high) !important;
 }
 
 .tree-item:hover {

@@ -169,19 +169,14 @@
 
         <script>
 
-            // The Browser API key obtained from the Google API Console.
-            var pickerKey = "AIzaSyCVoUn8BeFWqDN8oUkdSfb3O71ZkNvwS8s"
             // The Client ID obtained from the Google API Console.
             var clientId  = "619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln"
 
-            var pickerApiLoaded = false
-            var oauthToken
             var googleAuth
             var googleUser
 
             var gdrivedocs = "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
 
-            var picker
             var client
             var home_id
 
@@ -192,7 +187,7 @@
                     gapi.client.init({
                         client_id: `${clientId}.apps.googleusercontent.com`,
                         fetch_basic_profile: true,
-                        scope: "https://www.googleapis.com/auth/drive",
+                        scope: "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata",
                         ux_mode: "redirect",
                     }).then(function() {
                         googleAuth = gapi.auth2.getAuthInstance()
@@ -212,15 +207,15 @@
                         googleUser = googleAuth.currentUser.get()
                         let authResult = googleUser.getAuthResponse()
                         if (authResult && !authResult.error) {
-                            oauthToken = authResult.access_token
                             gapi.client.load("drive", "v3", function() {
                                 gapi.client.drive.files.list({
                                     q: "name = 'OneMark' and mimeType = 'application/vnd.google-apps.folder'"
                                 }).then(function(response) {
                                     var files = response.result.files;
+                                    document.temp = files
                                     if (files.length > 0) {
                                         home_id = files[0].id
-                                        searchFiles()
+                                        initDriveToSess(home_id)
                                     } else {
                                         gapi.client.drive.files.create({
                                             resource: {
@@ -282,109 +277,80 @@
                 }
 
 
-                /*
-                gapi.load('picker', function() {
-                    pickerApiLoaded = true
-                    createPicker()
-                })
 
-                // Create and render a Picker object for picking user Photos.
-                 function createPicker() {
-                     if (pickerApiLoaded && oauthToken) {
-
-                         var docs = new google.picker.DocsView(google.picker.ViewId.DOCS)
-                         docs.setMimeTypes("application/json,application/pdf")
-                         docs.setMode(google.picker.DocsViewMode.LIST)
-                         docs.setParent("1fJ919_VDTk3hgn95x8CBXbsvcTFnojv-")
-
-                         picker = new google.picker.PickerBuilder().
-                             addView(docs).
-                             addView(new google.picker.DocsUploadView()).
-                             setOAuthToken(oauthToken).
-                             setDeveloperKey(pickerKey).
-                             setCallback(pickerCallback).
-                             toUri()
-
-                         var iframe = document.createElement('iframe')
-                         iframe.src = picker
-                         iframe.style.height = "100vh"
-                         iframe.style.width =  "300px"
-                         iframe.style.fontSize = "11px"
-                         document.querySelector(".gdrive").appendChild(iframe)
-
-                   }
-                 }
-
-                 // A simple callback implementation.
-                 function pickerCallback(data) {
-                     var url = 'nothing';
-                     if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-                         var doc = data[google.picker.Response.DOCUMENTS][0];
-                         url = doc[google.picker.Document.URL];
-                     }
-                     var message = 'You picked: ' + url;
-                     console.log(message)
-                 }
-                 */
         }
 
-        function searchFiles() {
+        function initDriveToSess(folderID) {
             gapi.client.load("drive", "v3", function() {
-                gapi.client.drive.files.list({
-                    q: `'${home_id}' in parents`
-                }).then(function(response) {
-                    var files = response.result.files;
-                    console.log(files)
-                    let tree  = document.querySelector(".tree-list")
-                    for(let file of files) {
-                        let temp = document.createElement("div")
-                        temp.innerHTML = `<li class="tree-item"><button class="button-hidden" data-id="${file.id}" onclick="selectFile(this)">${file.name}</button></li>`
-                        tree.appendChild(temp.firstChild)
+                let request = gapi.client.drive.files.list({
+                    q: `'${folderID}' in parents`
+                })
+                request.then(function(response) {
+                    let files = response.result.files
+                    if (files) for (let file of files) {
+                        getFileFromDrive(file.id)
                     }
+                    initMenuFile(folderID)
                 })
             })
         }
 
-        function getFile(fileId) {
-            gapi.client.load("drive", "v3", function() {
-
-                let request = gapi.client.drive.files.get({
-                    fileId: fileId,
-                    alt: 'json',
-                    fields: 'webContentLink'
-                })
-
-                request.execute(function(jsonResp, rawResp) {
-                    console.log(jsonResp, rawResp)
-                })
-            })
+        function initMenuFile(folderID) {
+            let tree = document.querySelector(".tree-list")
+            for(let item of Object.values(sessionStorage)) {
+                let file = JSON.parse(item).meta
+                if (file.parents.includes(folderID)) {
+                    let temp = document.createElement("div")
+                    if (file.mimeType != "application/vnd.google-apps.folder") {
+                        temp.innerHTML = `<li class="tree-item"><button class="button-hidden" data-id="${file.id}" onclick="getFile(event, this)">${file.name}</button></li>`
+                    } else {
+                        temp.innerHTML = `<li class="tree-item"><button class="button-hidden" data-id="${file.id}" onclick="getFile(event, this)">${file.name}</button></li>`
+                    }
+                    tree.appendChild(temp.firstChild)
+                }
+            }
         }
 
-        function getJSON(fileId) {
+        function getFileFromDrive(fileId) {
             gapi.client.load("drive", "v3", async function() {
-
-                let request = gapi.client.drive.files.get({
-                    fileId: fileId,
-                    alt: 'media',
-                    fields: 'webContentLink'
+                // Get blob value of the file.
+                let request_blob = gapi.client.drive.files.get({
+                    fileId: fileId, alt: 'media',
                 })
-
-                request.execute(function(jsonResp, rawResp) {
-                    console.log(jsonResp, rawResp)
-                    return initPgFromJson(document.body, jsonResp)
+                let blob = await request_blob.then(function(response) {
+                    return response.body
                 })
+                // Get meta value of the file.
+                let request_meta = gapi.client.drive.files.get({
+                    fileId: fileId, alt: 'json',
+                    fields: 'id, name, mimeType, fileExtension, parents',
+                })
+                let meta = await request_meta.then(function(response) {
+                    return JSON.parse(response.body)
+                })
+                sessionStorage.setItem(fileId, JSON.stringify({blob: blob, meta: meta}))
             })
         }
 
-
-
-        function selectFile(meti) {
+        function getFile(event, meti) {
             // Remove active from all tree items.
             for(let item of document.querySelectorAll(".tree-item")) {
                 item.classList.remove("active")
             }
+            // Select active to parent item of button.
             meti.parentElement.classList.add("active")
-            getJSON(meti.getAttribute("data-id"))
+            // Load file from session onto page.
+            getFileFromSess(meti.getAttribute("data-id"))
+            event.preventDefault()
+            meti.parentElement.focus()
+            console.log("tried focusing")
+        }
+
+        function getFileFromSess(fileId) {
+            let file = JSON.parse(sessionStorage.getItem(fileId))
+            if (file.meta.fileExtension == "json") {
+                initPageFmJson(document.body, JSON.parse(file.blob))
+            }
         }
 
         </script>
