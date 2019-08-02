@@ -42,6 +42,8 @@
         <link rel="stylesheet" href="mark.css">
         <script src="mark.js"></script>
 
+
+
     </head>
 
     <body>
@@ -156,6 +158,8 @@
                             <li class="list-line"><hr></li>
                             <li><button class="button-hidden" onclick="downloadJson()">Download as JSON    </button></li>
                             <li><button class="button-hidden" onclick="downloadMark()">Download as Markdown</button></li>
+                            <li class="list-line"><hr></li>
+                            <li><button class="button-hidden" onclick="NightMode()">Toggle Night Mode</button></li>
                             <li class="list-line"><hr></li>
                         </ul>
                     </div>
@@ -365,26 +369,43 @@
             const menuFile = document.querySelector(".menu-file")
             const menuHelp = document.querySelector(".menu-help")
             const menuMain = document.querySelector(".menu-main")
-            function toggle(element) {
-                element.classList.toggle("active")
-            }
+
             iconFile.addEventListener("click", function(event) {
-                toggle(menuFile)
-                toggle(iconFile)
+                menuFile.classList.toggle("active")
+                iconFile.classList.toggle("active")
             })
             iconHelp.addEventListener("click", function(event) {
-                toggle(menuHelp)
-                toggle(iconHelp)
+                menuHelp.classList.toggle("active")
+                iconHelp.classList.toggle("active")
+                menuMain.classList.remove("active")
+                iconMain.classList.remove("active")
             })
             iconMain.addEventListener("click", function(event) {
-                toggle(menuMain)
-                toggle(iconMain)
+                menuMain.classList.toggle("active")
+                iconMain.classList.toggle("active")
+                menuHelp.classList.remove("active")
+                iconHelp.classList.remove("active")
             })
 
             const iconLoad = document.querySelector(".icon-load")
             iconLoad.addEventListener("click", function(event) {
-                toggle(iconLoad)
+                iconLoad.classList.toggle("active")
             })
+        </script>
+        <script>
+            function NightMode() {
+                let base, font
+                if (document.nightMode) {
+                    base = getComputedStyle(document.documentElement).getPropertyValue('--lite-base')
+                    font = getComputedStyle(document.documentElement).getPropertyValue('--lite-font')
+                } else {
+                    base = getComputedStyle(document.documentElement).getPropertyValue('--dark-base')
+                    font = getComputedStyle(document.documentElement).getPropertyValue('--dark-font')
+                }
+                document.documentElement.style.setProperty('--default-base', base)
+                document.documentElement.style.setProperty('--default-font', font)
+                document.nightMode = !document.nightMode
+            }
         </script>
     </body>
 </html>

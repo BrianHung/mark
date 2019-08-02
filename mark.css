@@ -7,7 +7,19 @@
      --dark-gray: #8e8e93;
      --lite-high: #fcf3cf;
      --dark-high: rgba(253, 205, 44, 0.65);
-     --lite-blue: rgba(10, 132, 255, 0.2);
+     --lite-blue: rgba(10, 132, 255, 0.20);
+
+     --dark-base: #32325d;
+     --lite-base: #ffffff;
+     --dark-font: #ffffff;
+     --lite-font: #000000;
+
+     --default-base: var(--lite-base);
+     --default-font: var(--lite-font);
+
+     --green: #24b47e;
+     --blue: #87aefd;
+     --purple: #6772e5;
  }
 
 @import url('https://rsms.me/inter/inter.css');
@@ -32,8 +44,8 @@ body
 {
     padding: 2em 0;
     margin: 0;
-    background: #ffffff;
-    color: black;
+    background: var(--default-base);
+    color: var(--default-font);
     line-height: 1.8;
     height: 100%;
 }
@@ -119,11 +131,12 @@ blockquote
     padding: 0.5em 0.75em;
     width:100%;
     box-sizing: border-box;
-    font-family: 'Fira Mono', monospace;
     outline: none;
     border-radius: 5px;
-    background-color: #f1f0f0;
+    background-color: var(--default-base);
+    color: var(--default-font);
     line-height: 1.8;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 .cell-editor: focus
 {
@@ -131,7 +144,14 @@ blockquote
     border-color: #719ECE;
     box-shadow: 0 0 10px #719ECE;
 }
-
+.cell-editor .cm-comment
+{
+    font-family: 'Fira Mono', monospace;
+}
+.cell-editor .cm-variable
+{
+    font-family: 'Fira Mono', monospace;
+}
 
 /*  ============================================================================
     Cell Render
@@ -140,9 +160,8 @@ blockquote
 {
     /* display is explicitly set for displayEditor */
     display: none;
-    padding: 0.0em 1em;
+    padding: 0.5em 1em;
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-    border: 1px solid transparent;
     border-radius: 5px;
     outline: none;
     transition-duration: 0.2s;
@@ -214,8 +233,8 @@ blockquote
 
 .cell-render > *
 {
-    margin-block-start: 0.5em;
-    margin-block-end: 0.5em;
+    margin-block-start: 0.25em;
+    margin-block-end: 0.25em;
 }
 
 /*  ============================================================================
@@ -224,6 +243,10 @@ blockquote
 .CodeMirror
 {
     height: auto;
+}
+.CodeMirror-cursor
+{
+    border-left: 1px solid var(--default-font);
 }
 .cm-s-default .cm-atom
 {
@@ -243,7 +266,7 @@ blockquote
 }
 .cm-s-default .cm-header
 {
-    color: #000000;
+    color: var(--default-font);
 }
 
 /*  ============================================================================
@@ -397,8 +420,10 @@ pre.hljs
     z-index: -1;
     overflow: scroll;
     scrollbar-width: none;
-    background-color: white;
+    background-color: var(--lite-base);
+    color: var(--lite-font);
     transition: opacity 0.2s ease-out;
+
 }
 .menu-wrap
 {
@@ -538,7 +563,7 @@ pre.hljs
 }
 .menu-list .list-line:hover
 {
-    background-color: #ffffff;
+    background-color: var(--lite-base);
 }
 .menu-list .list-right
 {
