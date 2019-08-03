@@ -26,7 +26,7 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/fullscreen.min.css">
         <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/fullscreen.min.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/placeholder.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/mode/overlay.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/markdown/markdown.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/gfm/gfm.min.js"></script>
@@ -163,7 +163,8 @@
                             <li><button class="button-hidden" onclick="downloadJson()">Download as JSON    </button></li>
                             <li><button class="button-hidden" onclick="downloadMark()">Download as Markdown</button></li>
                             <li class="list-line"><hr></li>
-                            <li><button class="button-hidden" onclick="NightMode()">Toggle Night Mode</button></li>
+                            <li><button class="button-hidden" onclick="NightMode()">Toggle Night Mode</button>
+                            </li>
                             <li class="list-line"><hr></li>
                         </ul>
                     </div>
@@ -175,7 +176,7 @@
             </div>
         </div>
 
-        <script>EventListener(document.body)</script>
+        <script>EventListener(document.body); addCell(document.querySelector(".cell-container"))</script>
         <script src="https://apis.google.com/js/api:client.js?onload=initClient" async defer></script>
 
         <script>
@@ -421,41 +422,46 @@
                     // Prevent vertical scroll while swiping.
                     event.preventDefault()
                     // Get starting x-position for this event.
-                    mouseX = event.clientX;
+                    eventX = event.clientX;
 
-                    var offset, color
+                    var offset, color, image, position
                     function reposition(event) {
                         // Get offset from current x-position to initial.
-                        offset = event.touches[0].clientX - mouseX
+                        offset = Math.min(Math.max(event.clientX - eventX,-200), 200)
                         // Translate editor and render by offset.
                         editor.style.transform = `translateX(${offset + 'px'})`
                         render.style.transform = `translateX(${offset + 'px'})`
                         // Compute background color based on offset.
-                        if (offset >   0) { color = "rgb(255, 159,  10)"}
-                        if (offset > 100) { color = "rgb(255,  69,  58)"}
-                        if (offset <   0) { color = "rgb( 48, 209,  88)"}
-                        if (offset <-100) { color = "rgb( 10, 132, 255)"}
+                        if (offset >   0) { color="rgb( 48, 209,  88)";image="edit"  ;position="02% 50%"}
+                        if (offset > 100) { color="rgb( 10, 132, 255)";image="copy"  ;position="02% 50%"}
+                        if (offset <   0) { color="rgb(255, 159,  10)";image="add"   ;position="98% 50%"}
+                        if (offset <-100) { color="rgb(255,  69,  58)";image="delete";position="98% 50%"}
                         cell.style.backgroundColor = color
+                        cell.style.backgroundImage = `url('img/icons/${image}.svg')`
+                        cell.style.backgroundPosition = position
                     }
 
                     cellContainer.addEventListener('mousemove', reposition, false);
 
-                    function action(event) {
-                        console.log("touchend triggered")
+                    function action(event, strt=10, half=100) {
                         cellContainer.removeEventListener('mousemove', reposition, false);
 
                         editor.style.transform = "translateX(0px)"
                         render.style.transform = "translateX(0px)"
 
-                        if (offset > 0 || offset < 0) {
-                            if (cell.editing) {
-                                displayRender(cell)
-                            } else {
-                                displayEditor(cell)
-                            }
-
+                        if ( strt < offset && offset <= half) {
+                            cell.editing ? displayRender(cell) : displayEditor(cell)
                         }
-                        console.log("translate here")
+                        if ( half < offset) {
+                            cellToClipboard(cell)
+                        }
+                        if (-half < offset && offset <=-strt) {
+                            let next = cell.nextElementSibling
+                            addCell(cellContainer, next)
+                        }
+                        if (-half > offset) {
+                            cell.parentElement.removeChild(cell)
+                        }
                         cellContainer.removeEventListener('mouseup', action, false)
                     }
 
@@ -472,48 +478,46 @@
                     // Prevent vertical scroll while swiping.
                     event.preventDefault()
                     // Get starting x-position for this event.
-                    touchX = event.touches[0].clientX;
+                    eventX = event.touches[0].clientX;
 
-                    var offset, color
+                    var offset, color, image, position
                     function reposition(event) {
                         // Get offset from current x-position to initial.
-                        offset = event.touches[0].clientX - touchX
+                        offset = Math.min(Math.max(event.touches[0].clientX - eventX,-200), 200)
                         // Translate editor and render by offset.
                         editor.style.transform = `translateX(${offset + 'px'})`
                         render.style.transform = `translateX(${offset + 'px'})`
                         // Compute background color based on offset.
-                        if (offset >   0) { color = "rgb( 48, 209,  88)"}
-                        if (offset > 100) { color = "rgb( 10, 132, 255)"}
-                        if (offset <   0) { color = "rgb(255, 159,  10)"}
-                        if (offset <-100) { color = "rgb(255,  69,  58)"}
-                        console.log(offset)
+                        if (offset >   0) { color="rgb( 48, 209,  88)";image="edit"  ;position="02% 50%"}
+                        if (offset > 100) { color="rgb( 10, 132, 255)";image="copy"  ;position="02% 50%"}
+                        if (offset <   0) { color="rgb(255, 159,  10)";image="add"   ;position="98% 50%"}
+                        if (offset <-100) { color="rgb(255,  69,  58)";image="delete";position="98% 50%"}
                         cell.style.backgroundColor = color
+                        cell.style.backgroundImage = `url('img/icons/${image}.svg')`
+                        cell.style.backgroundPosition = position
                     }
 
                     cellContainer.addEventListener('touchmove', reposition, false);
 
-                    function action(event) {
-                        console.log("touchend triggered")
+                    function action(event, strt=10, half=100) {
                         cellContainer.removeEventListener('touchmove', reposition, false);
 
                         editor.style.transform = "translateX(0px)"
                         render.style.transform = "translateX(0px)"
 
-                        if (   5 < offset && offset <= 100) {
+                        if ( strt < offset && offset <= half) {
                             cell.editing ? displayRender(cell) : displayEditor(cell)
                         }
-                        if ( 100 < offset) {
-                            console.log(editor.CodeMirror.getValue())
+                        if ( half < offset) {
+                            cellToClipboard(cell)
                         }
-                        if (-100 < offset && offset <=  -5) {
+                        if (-half < offset && offset <=-strt) {
                             let next = cell.nextElementSibling
                             addCell(cellContainer, next)
-                            console.log("addce;;")
                         }
-                        if (-100 > offset) {
+                        if (-half > offset) {
                             cell.parentElement.removeChild(cell)
                         }
-                        console.log("translate here", offset, -100 < offset <=  -5)
                         cellContainer.removeEventListener('touchend', action, false)
                     }
 

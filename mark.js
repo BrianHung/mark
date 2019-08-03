@@ -21,7 +21,7 @@ function displayEditor(cell) {
  * @return undefined
  */
 function displayRender(cell) {
-    const emptyText = `<p><em> empty cell </em></p>`
+    const emptyText = `<p><em>&nbsp; empty cell</em></p>`
     cell.render.innerHTML = markdown.render(cell.editor.CodeMirror.getValue()) || emptyText
     displayEditor(cell)
 }
@@ -148,7 +148,8 @@ const defaultOptions = {
                 cm.setOption("fullScreen", false)
             }
         }
-    }
+    },
+    placeholder: "  empty cell"
 }
 
 function EventListener(body) {
@@ -301,3 +302,26 @@ function EventListener(body) {
         */
     })
 }
+
+/**
+ * Copies input text to clip-board.
+ * @return undefined
+ */
+ function copyToClipboard(text) {
+     // Create temporary DOM element.
+     let temp = document.createElement("input")
+     temp.value = text
+     document.body.appendChild(temp)
+     temp.select()
+     document.execCommand("copy")
+     document.body.removeChild(temp)
+ }
+ /**
+  * Copies raw markdown of cell to clip-board.
+  * @return undefined
+  */
+  function cellToClipboard(cell) {
+      let text = cell.editor.CodeMirror.getValue()
+      console.log(text, "asdas")
+      copyToClipboard(text)
+  }

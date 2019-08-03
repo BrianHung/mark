@@ -106,6 +106,8 @@ blockquote
     margin: 0 auto;
     outline: none;
     font-size: 1em;
+    background-repeat: no-repeat;
+    background-size: 2em;
 }
 .cell:active
 {
@@ -115,28 +117,18 @@ blockquote
 .cell:active .cell-editor
 {
     background-color: var(--lite-gray);
+    box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27, 39, 51,0.08);
+    border-radius: 5px;
 }
-
 .cell:active .cell-render
 {
     background-color: var(--lite-gray);
+    box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27, 39, 51,0.08);
+    border-radius: 5px;
 }
 .cell:active .cell-render > *
 {
     user-select: none;
-}
-.cell-menu {
-    position: absolute;
-    top: 0px;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-}
-.cell-menu .cell-action
-{
-    position: absolute;
-    height: 100%;
-    width: 100%;
 }
 @media only screen and (max-width: 768px) {
     .cell
@@ -149,14 +141,16 @@ blockquote
 {
     margin-bottom: 1em;
 }
-.cell:hover
+/*
+.cell-render:hover, .cell-editor:hover
 {
     box-shadow: inset 3px 0 0 0 #0a84ff;
 }
-.cell:focus-within
+.cell-render:focus-within, .cell-editor:focus-within,
 {
     box-shadow: inset 3px 0 0 0 #30d158;
 }
+*/
 
 
 /*  ============================================================================
@@ -201,10 +195,6 @@ blockquote
     background-color: var(--default-base);
     color: var(--default-font);
     position: relative;
-}
-.cell-render.active
-{
-    background-color: var(--lite-gray);
 }
 .cell-render ::selection {
     background-color: var(--dark-high);
@@ -289,6 +279,10 @@ blockquote
 }
 .CodeMirror-scroll::-webkit-scrollbar  {
     display: none;
+}
+.CodeMirror pre.CodeMirror-placeholder
+{
+    color: var(--dark-gray);
 }
 .cm-s-default .cm-atom
 {
@@ -540,6 +534,10 @@ pre.hljs
     font: inherit;
     cursor: pointer;
     outline: inherit;
+}
+.menu .button-hidden img
+{
+    height: 1.5em;
 }
 .menu .button:hover
 {
