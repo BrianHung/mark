@@ -171,7 +171,6 @@ blockquote
     width:100%;
     box-sizing: border-box;
     outline: none;
-    border-radius: 5px;
     background-color: var(--default-base);
     color: var(--default-font);
     line-height: 1.8;
