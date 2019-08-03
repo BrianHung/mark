@@ -157,7 +157,7 @@ function EventListener(body) {
 
     body.addEventListener("keydown",  function(event) {
         // Event target is with-in a cell element.
-        console.log(event, event.code, event.shiftKey, event.target)
+        // console.log(event, event.code, event.shiftKey, event.target)
         let cell = event.target.closest(".cell")
         if(cell != null) {
             switch(event.code) {

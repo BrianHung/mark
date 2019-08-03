@@ -48,11 +48,7 @@
 
     <body>
         <div class="cell-container">
-            <div class="cell" tabindex="0" style="background-color: #30d158;">
-                <div class="cell-render" style="display: block;">
-                    <p>Hello</p>
-                </div>
-            </div>
+
 
         </div>
         <div class="footer">
@@ -399,9 +395,6 @@
                 iconLoad.classList.toggle("active")
             })
 
-            document.querySelector(".cell-render").addEventListener("click", function(event) {
-                document.querySelector(".cell-render").classList.toggle("active")
-            })
         </script>
         <script>
             function NightMode() {
@@ -417,88 +410,115 @@
                 document.documentElement.style.setProperty('--default-font', font)
                 document.nightMode = !document.nightMode
             }
-            var contextmenu = document.querySelector('.cell-container');
             var initX, initY, mousePressX, mousePressY;
 
-            contextmenu.addEventListener('mousedown', function(event) {
+            cellContainer.addEventListener('mousedown', function(event) {
+            	let cell = event.target.closest(".cell")
+                if (cell) {
+                	let editor = cell.editor
+                    let render = cell.render
 
-            	let x = this
-            	let c = x.querySelector(".cell-render")
-            	console.log("mousedetected")
-            	console.log(event.target)
-                initX = x.offsetLeft;
-                initY = x.offsetTop;
+                    // Prevent vertical scroll while swiping.
+                    event.preventDefault()
+                    // Get starting x-position for this event.
+                    mouseX = event.clientX;
 
-                mousePressX = event.clientX;
-                mousePressY = event.clientY;
-
-                function repositionElement(event) {
-                    let offset = event.clientX - mousePressX
-                    c.style.transform = `translateX(${offset + 'px'})`
-
-                    var color
-                    if (offset > 0) {
-                        color = offset > 80 ? "black" : "white"
-                    } else {
-                        color = offset <-80 ? "black" : "white"
+                    var offset, color
+                    function reposition(event) {
+                        // Get offset from current x-position to initial.
+                        offset = event.touches[0].clientX - mouseX
+                        // Translate editor and render by offset.
+                        editor.style.transform = `translateX(${offset + 'px'})`
+                        render.style.transform = `translateX(${offset + 'px'})`
+                        // Compute background color based on offset.
+                        if (offset >   0) { color = "rgb(255, 159,  10)"}
+                        if (offset > 100) { color = "rgb(255,  69,  58)"}
+                        if (offset <   0) { color = "rgb( 48, 209,  88)"}
+                        if (offset <-100) { color = "rgb( 10, 132, 255)"}
+                        cell.style.backgroundColor = color
                     }
-                    c.parentElement.style.backgroundColor = color
+
+                    cellContainer.addEventListener('mousemove', reposition, false);
+
+                    function action(event) {
+                        console.log("touchend triggered")
+                        cellContainer.removeEventListener('mousemove', reposition, false);
+
+                        editor.style.transform = "translateX(0px)"
+                        render.style.transform = "translateX(0px)"
+
+                        if (offset > 0 || offset < 0) {
+                            if (cell.editing) {
+                                displayRender(cell)
+                            } else {
+                                displayEditor(cell)
+                            }
+
+                        }
+                        console.log("translate here")
+                        cellContainer.removeEventListener('mouseup', action, false)
+                    }
+
+                    cellContainer.addEventListener('mouseup', action, false);
                 }
-
-            	console.log("this", this)
-                x.addEventListener('mousemove', repositionElement, false);
-            	console.log("added listener")
-                window.addEventListener('mouseup', function() {
-                  contextmenu.removeEventListener('mousemove', repositionElement, false);
-                  c.style.transform = `translateX(${0 + 'px'})`
-                }, false);
-
             }, false);
 
-            contextmenu.addEventListener('touchstart', function(event) {
+            cellContainer.addEventListener('touchstart', function(event) {
+            	let cell = event.target.closest(".cell")
+                if (cell) {
+                	let editor = cell.editor
+                    let render = cell.render
 
-            	let x = event.target.closest(".cell")
-            	let c = x.editing ? x.querySelector(".cell-editor") : x.querySelector(".cell-render")
+                    // Prevent vertical scroll while swiping.
+                    event.preventDefault()
+                    // Get starting x-position for this event.
+                    touchX = event.touches[0].clientX;
 
-            	console.log("touchdetected")
-            	console.log(event)
-
-                initX = x.offsetLeft;
-                initY = x.offsetTop;
-
-                var offset
-                mousePressX = event.touches[0].clientX;
-                mousePressY = event.touches[0].clientY;
-
-                function repositionElement(event) {
-                    offset = event.touches[0].clientX - mousePressX
-                    c.style.transform = `translateX(${offset + 'px'})`
-
-                    var color
-                    if (offset > 0) {
-                        color = offset > 100 ? "black" : "blue"
-                    } else {
-                        color = offset <-100 ? "black" : "green"
+                    var offset, color
+                    function reposition(event) {
+                        // Get offset from current x-position to initial.
+                        offset = event.touches[0].clientX - touchX
+                        // Translate editor and render by offset.
+                        editor.style.transform = `translateX(${offset + 'px'})`
+                        render.style.transform = `translateX(${offset + 'px'})`
+                        // Compute background color based on offset.
+                        if (offset >   0) { color = "rgb( 48, 209,  88)"}
+                        if (offset > 100) { color = "rgb( 10, 132, 255)"}
+                        if (offset <   0) { color = "rgb(255, 159,  10)"}
+                        if (offset <-100) { color = "rgb(255,  69,  58)"}
+                        console.log(offset)
+                        cell.style.backgroundColor = color
                     }
-                    c.parentElement.style.backgroundColor = color
+
+                    cellContainer.addEventListener('touchmove', reposition, false);
+
+                    function action(event) {
+                        console.log("touchend triggered")
+                        cellContainer.removeEventListener('touchmove', reposition, false);
+
+                        editor.style.transform = "translateX(0px)"
+                        render.style.transform = "translateX(0px)"
+
+                        if (   5 < offset && offset <= 100) {
+                            cell.editing ? displayRender(cell) : displayEditor(cell)
+                        }
+                        if ( 100 < offset) {
+                            console.log(editor.CodeMirror.getValue())
+                        }
+                        if (-100 < offset && offset <=  -5) {
+                            let next = cell.nextElementSibling
+                            addCell(cellContainer, next)
+                            console.log("addce;;")
+                        }
+                        if (-100 > offset) {
+                            cell.parentElement.removeChild(cell)
+                        }
+                        console.log("translate here", offset, -100 < offset <=  -5)
+                        cellContainer.removeEventListener('touchend', action, false)
+                    }
+
+                    cellContainer.addEventListener('touchend', action, false);
                 }
-
-                x.addEventListener('touchmove', repositionElement, false);
-
-                window.addEventListener('touchend', function() {
-                  contextmenu.removeEventListener('touchmove', repositionElement, false);
-                  console.log(offset)
-                  if (offset > 0 || offset < 0) {
-                      console.log(x.editing)
-                      if (x.editing) {
-                          displayRender(x)
-                      } else {
-                          displayEditor(x)
-                      }
-                  }
-                  c.style.transform = `translateX(${0 + 'px'})`
-                }, false);
-
             }, false);
         </script>
     </body>
