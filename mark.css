@@ -2,6 +2,20 @@
     Body
  */
 
+@import url('https://rsms.me/inter/inter.css');
+html
+{
+    font-family: 'Inter', sans-serif;
+    text-rendering: optimizeLegibility;
+}
+@supports (font-variation-settings: normal)
+{
+    html
+    {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
 :root {
      --lite-gray: #f2f2f7;
      --dark-gray: #8e8e93;
@@ -21,20 +35,6 @@
      --blue: #87aefd;
      --purple: #6772e5;
  }
-
-@import url('https://rsms.me/inter/inter.css');
-html
-{
-    font-family: 'Inter', sans-serif;
-    text-rendering: optimizeLegibility;
-}
-@supports (font-variation-settings: normal)
-{
-    html
-    {
-        font-family: 'Inter var', sans-serif;
-    }
-}
 html
 {
     margin: 0 auto;
@@ -42,7 +42,7 @@ html
 }
 body
 {
-    padding: 2em 0;
+    padding: 0;
     margin: 0;
     background: var(--default-base);
     color: var(--default-font);
@@ -88,22 +88,59 @@ blockquote
 /*  ============================================================================
     Cell
  */
+ .cell-container
+ {
+     position: relative;
+     padding: 2em 0;
+     height: 100%;
+ }
 .cell
 {
+    position: relative;
     box-sizing: border-box;
     width: 100%;
     max-width: 768px;
-    padding: 0 2em;
+    padding: 0 0;
     margin: 0 auto;
     outline: none;
     font-size: 1em;
+}
+.cell:active
+{
+    position: relative;
+    background-color: yellow;
+}
+.cell:active .cell-editor
+{
+    background-color: var(--lite-gray);
+}
+
+.cell:active .cell-render
+{
+    background-color: var(--lite-gray);
+}
+.cell:active .cell-render > *
+{
+    user-select: none;
+}
+.cell-menu {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+}
+.cell-menu .cell-action
+{
+    position: absolute;
+    height: 100%;
+    width: 100%;
 }
 @media only screen and (max-width: 768px) {
     .cell
     {
         font-size: 18px;
         font-weight: 500;
-        padding: 0em 1em;
     }
 }
 .cell:not(:last-child)
@@ -128,7 +165,7 @@ blockquote
 {
     /* display is explicitly set for displayEditor */
     display: block;
-    padding: 0.5em 0.75em;
+    padding: 0.5em 2.75em;
     width:100%;
     box-sizing: border-box;
     outline: none;
@@ -144,11 +181,7 @@ blockquote
     border-color: #719ECE;
     box-shadow: 0 0 10px #719ECE;
 }
-.cell-editor .cm-comment
-{
-    font-family: 'Fira Mono', monospace;
-}
-.cell-editor .cm-variable
+.cell-editor span[class^="cm-"]
 {
     font-family: 'Fira Mono', monospace;
 }
@@ -160,12 +193,17 @@ blockquote
 {
     /* display is explicitly set for displayEditor */
     display: none;
-    padding: 0.5em 1em;
+    padding: 0.5em 3em;
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-    border-radius: 5px;
     outline: none;
-    transition-duration: 0.2s;
     line-height: 1.8;
+    background-color: var(--default-base);
+    color: var(--default-font);
+    position: relative;
+}
+.cell-render.active
+{
+    background-color: var(--lite-gray);
 }
 .cell-render ::selection {
     background-color: var(--dark-high);
@@ -247,6 +285,9 @@ blockquote
 .CodeMirror-cursor
 {
     border-left: 1px solid var(--default-font);
+}
+.CodeMirror-scroll::-webkit-scrollbar  {
+    display: none;
 }
 .cm-s-default .cm-atom
 {
@@ -659,4 +700,18 @@ button.icon
 button.icon:active
 {
     transform: translateY(2px);
+}
+
+.cell-action
+{
+    width: 100%;
+}
+
+.cell-action-editor
+{
+
+}
+.cell-action-delete
+{
+
 }

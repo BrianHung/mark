@@ -153,6 +153,8 @@ const defaultOptions = {
 
 function EventListener(body) {
 
+    const cellContainer = body.querySelector(".cell-container")
+
     body.addEventListener("keydown",  function(event) {
         // Event target is with-in a cell element.
         console.log(event, event.code, event.shiftKey, event.target)
@@ -180,7 +182,7 @@ function EventListener(body) {
                             let next = cell.nextElementSibling
                             if(next == null || next.className != "cell") {
                                 event.preventDefault()
-                                cell = addCell(body, next)
+                                cell = addCell(cellContainer, next)
                             } else {
                                 next.focus()
                             }
@@ -276,7 +278,10 @@ function EventListener(body) {
                     if(event.shiftKey) {
                         cell = document.querySelector(".cell")
                         if(cell == null) {
-                            cell = addCell(body)
+                            event.preventDefault()
+                            event.stopPropagation()
+                            cell = addCell(cellContainer)
+
                         }
                     }
                     break
