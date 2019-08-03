@@ -1,49 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <title>OneMark</title>
         <meta charset="utf-8">
         <meta name="description" content="A Progressive Note Editor">
 
-        <!-- Add iOS meta tags and icons -->
+        <!-- Add iOS meta tags and icons. -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link rel="apple-touch-icon" href="./img/OneMark_sm.png">
         <link rel="apple-touch-startup-image" href="/OneMark.png">
-
-
         <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico'/>
 
-        <title>OneMark</title>
-
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400">
-
+        <!-- Add links to CSS and preconnects. -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js"></script>
-
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/lib/codemirror.css">
-        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/lib/codemirror.min.js"></script>
-
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/fullscreen.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/fullscreen.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/placeholder.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/mode/overlay.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/markdown/markdown.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/gfm/gfm.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/javascript/javascript.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/python/python.js"></script>
-
-        <script src="https://cdn.jsdelivr.net/npm/highlightjs@9.12.0/highlight.pack.min.js"></script>
-        <script>hljs.initHighlightingOnLoad()</script>
-
-        <script src="markdown.js"></script>
-        <script>const markdown = window.markdown</script>
-
         <link rel="stylesheet" href="mark.css">
-        <script src="mark.js"></script>
-
-
-
+        <link href='https://accounts.google.com' rel='preconnect' crossorigin>
     </head>
 
     <body>
@@ -175,7 +150,39 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+            WebFontConfig = {
+                google: { families: [ 'Fira+Mono:400' ] }
+            };
 
+            (function() {
+                var wf = document.createElement('script');
+                wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+                wf.type = 'text/javascript';
+                wf.async = 'true';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(wf, s);
+            })();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/lib/codemirror.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/fullscreen.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/display/placeholder.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/addon/mode/overlay.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/markdown/markdown.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/gfm/gfm.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/javascript/javascript.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/codemirror@5.48.2/mode/python/python.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/highlightjs@9.12.0/highlight.pack.min.js"></script>
+        <script>hljs.initHighlightingOnLoad()</script>
+
+        <script src="markdown.js"></script>
+        <script>const markdown = window.markdown</script>
+
+        <script src="mark.js"></script>
         <script>EventListener(document.body); addCell(document.querySelector(".cell-container"))</script>
         <script src="https://apis.google.com/js/api:client.js?onload=initClient" async defer></script>
 
@@ -523,7 +530,7 @@
 
                     cellContainer.addEventListener('touchend', action, false);
                 }
-            }, false);
+            }, {passive: true});
         </script>
     </body>
 </html>
