@@ -6,6 +6,7 @@
 html
 {
     font-family: 'Inter', sans-serif;
+    font-display: auto;
     text-rendering: optimizeLegibility;
 }
 @supports (font-variation-settings: normal)
