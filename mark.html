@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>OneMark</title>
+        <title>Mark</title>
         <meta charset="utf-8">
         <meta name="description" content="A Progressive Note Editor">
 
@@ -310,12 +310,12 @@
                     if (files) for (let file of files) {
                         getFileFromDrive(file.id)
                     }
-                    initMenuFile(folderID)
+                    initFileTree(folderID)
                 })
             })
         }
 
-        function initMenuFile(folderID) {
+        function initFileTree(folderID) {
             let tree = document.querySelector(".tree-list")
             for(let item of Object.values(sessionStorage)) {
                 let file = JSON.parse(item).meta
