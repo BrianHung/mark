@@ -22,6 +22,11 @@
     </head>
 
     <body>
+        <div class="header-wrapper">
+            <div class="header">
+                <input class="header-title" placeholder="Untitled">
+            </div>
+        </div>
         <div class="cell-container">
 
 
@@ -188,7 +193,6 @@
 
         <script>
 
-
             // The Client ID obtained from the Google API Console.
             var clientId  = "619548834976-ushntjb1m19qitj99mgbv5hnk3fbpcln"
 
@@ -332,23 +336,32 @@
         }
 
         function getFileFromDrive(fileId) {
-            gapi.client.load("drive", "v3", async function() {
-                // Get blob value of the file.
-                let request_blob = gapi.client.drive.files.get({
-                    fileId: fileId, alt: 'media',
+            return new Promise((resolve, reject) => {
+                gapi.client.load("drive", "v3", async function() {
+                    try {
+                        // Get blob value of the file.
+                        let request_blob = gapi.client.drive.files.get({
+                            fileId: fileId, alt: 'media',
+                        })
+                        let blob = await request_blob.then(function(response) {
+                            return response.body
+                        })
+                        // Get meta value of the file.
+                        let request_meta = gapi.client.drive.files.get({
+                            fileId: fileId, alt: 'json',
+                            fields: 'id, name, mimeType, parents',
+                        })
+                        let meta = await request_meta.then(function(response) {
+                            return JSON.parse(response.body)
+                        })
+
+                        const {id, name, mimeType, parents} = meta
+                        resolve({ file: new File([blob], name, mimeType), id: id, name:name, parents:parents})
+
+                    } catch(error) {
+                        reject(error)
+                    }
                 })
-                let blob = await request_blob.then(function(response) {
-                    return response.body
-                })
-                // Get meta value of the file.
-                let request_meta = gapi.client.drive.files.get({
-                    fileId: fileId, alt: 'json',
-                    fields: 'id, name, mimeType, fileExtension, parents',
-                })
-                let meta = await request_meta.then(function(response) {
-                    return JSON.parse(response.body)
-                })
-                sessionStorage.setItem(fileId, JSON.stringify({blob: blob, meta: meta}))
             })
         }
 
@@ -360,7 +373,9 @@
             // Select active to parent item of button.
             meti.parentElement.classList.add("active")
             // Load file from session onto page.
-            getFileFromSess(meti.getAttribute("data-id"))
+            let fileId = meti.getAttribute("data-id")
+            getFileFromSess(fileId)
+            document.currentId = fileId
         }
 
         const cellContainer = document.querySelector(".cell-container")
@@ -371,6 +386,16 @@
                 initPageFmJson(cellContainer, JSON.parse(file.blob))
             }
         }
+
+        function uploadToDrive(fileId) {
+            let file = JSON.parse(sessionStorage.getItem(fileId))
+            let meta = {
+                'name': file.meta.name,
+                'mimeType': file.meta.mimeType
+            }
+        }
+
+
 
         </script>
         <script>

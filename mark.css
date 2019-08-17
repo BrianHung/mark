@@ -86,16 +86,63 @@ blockquote
     font-style: italic;
 }
 
+.header-wrapper
+{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 20;
+}
+
+.header
+{
+    padding: 1em 0;
+    max-width: 768px;
+    height: 100%;
+    background-color: rgba(255,255,255,.90);
+    border-bottom: 1px solid var(--lite-gray);
+    margin-left:  auto;
+    margin-right: auto;
+}
+
+.header-title
+{
+    width: 50%;
+    margin: 0px auto;
+    padding: 0 1.75em;
+    box-sizing: border-box;
+    background: transparent;
+    outline: none;
+    border: none;
+    font-size: 1.7em;
+    font-weight: 700;
+}
+.header-title::placeholder {
+    color: #c7c7cc;
+}
+
+.file-name
+{
+    outline: none;
+}
+.file-name:empty:not(:focus)::before
+{
+    content: attr(data-placeholder);
+    color: var(--lite-gray);
+}
+
 /*  ============================================================================
     Cell
  */
  .cell-container
  {
      position: relative;
-     padding: 2em 0;
      height: 100%;
-     width: 100vw;
      overflow-x: hidden;
+     max-width: 768px;
+     margin: 0px auto;
+     padding: 6.25rem 0 0;
  }
 .cell
 {
@@ -117,13 +164,13 @@ blockquote
 }
 .cell:active .cell-editor
 {
-    box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27, 39, 51,0.08);
-    border-radius: 3px;
+    /* box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27, 39, 51,0.08);
+    border-radius: 3px; */
 }
 .cell:active .cell-render
 {
-    box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27, 39, 51,0.08);
-    border-radius: 3px;
+    /* box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27, 39, 51,0.08);
+    border-radius: 3px; */
 }
 .cell:active .cell-render > *
 {
@@ -164,7 +211,7 @@ blockquote
     width:100%;
     box-sizing: border-box;
     outline: none;
-    background-color: var(--default-base);
+    background-color: var(--lite-gray);
     color: var(--default-font);
     line-height: 1.8;
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -302,6 +349,7 @@ blockquote
 .cm-s-default .cm-header
 {
     color: var(--default-font);
+    font-family: 'Inter' !important;
 }
 
 /*  ============================================================================
