@@ -447,7 +447,7 @@
 
             cellContainer.addEventListener('mousedown', function(event) {
             	let cell = event.target.closest(".cell")
-                if (cell) {
+                if (cell && event.target.tagName == "DIV") {
                 	let editor = cell.editor
                     let render = cell.render
 
@@ -493,6 +493,9 @@
                         }
                         if (-half > offset) {
                             cell.parentElement.removeChild(cell)
+                            if (!document.querySelector(".cell")) {
+                                addCell(cellContainer)
+                            }
                         }
                         cellContainer.removeEventListener('mouseup', action, false)
                     }
@@ -503,7 +506,7 @@
 
             cellContainer.addEventListener('touchstart', function(event) {
             	let cell = event.target.closest(".cell")
-                if (cell) {
+                if (cell && event.target.tagName == "DIV") {
                 	let editor = cell.editor
                     let render = cell.render
 
@@ -549,6 +552,9 @@
                         }
                         if (-half > offset) {
                             cell.parentElement.removeChild(cell)
+                            if (!document.querySelector(".cell")) {
+                                addCell(cellContainer)
+                            }
                         }
                         cellContainer.removeEventListener('touchend', action, false)
                     }

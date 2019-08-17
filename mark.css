@@ -498,7 +498,7 @@ pre.hljs
     border-radius: 5px;
     padding: 0px;
     box-shadow: 0 0 0 1px rgba(99,114,130,0.16), 0 2px 16px rgba(27, 39, 51,0.08);
-    min-width: 300px;
+    width: 0;
     max-height: calc(100vh - 96px);
     z-index: -1;
     overflow: scroll;
@@ -538,7 +538,8 @@ pre.hljs
 .menu.active
 {
     opacity: 1;
-    z-index: 20;
+    z-index: 10;
+    min-width: 300px;
 }
 .menu.active > *
 {
